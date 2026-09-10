@@ -1,6 +1,6 @@
-﻿{
+{
   "name": "engram-recall",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Active recall layer for AI coding agents (Claude Code, Cursor, Codex, Antigravity)",
   "main": "bin/engram.js",
   "bin": {

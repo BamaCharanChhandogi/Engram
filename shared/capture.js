@@ -17,10 +17,46 @@ function logError(message) {
     }
 }
 
+function resolveConfig() {
+    let token = process.env.ENGRAM_TOKEN || process.env.DEVPRACTICE_TOKEN || '';
+    let apiUrl = process.env.ENGRAM_API || process.env.DEVPRACTICE_API || '';
+
+    // 1. Try local .env in current workspace
+    if (!token || !apiUrl) {
+        try {
+            const envPath = path.join(process.cwd(), '.env');
+            if (fs.existsSync(envPath)) {
+                const envContent = fs.readFileSync(envPath, 'utf8');
+                const tokenMatch = envContent.match(/ENGRAM_TOKEN=["']?([^"'\r\n]+)["']?/);
+                const apiMatch = envContent.match(/ENGRAM_API=["']?([^"'\r\n]+)["']?/);
+                if (!token && tokenMatch) token = tokenMatch[1].trim();
+                if (!apiUrl && apiMatch) apiUrl = apiMatch[1].trim();
+            }
+        } catch (e) {}
+    }
+
+    // 2. Try global ~/.engram/config.json
+    if (!token || !apiUrl) {
+        try {
+            const globalConfigFile = path.join(os.homedir(), '.engram', 'config.json');
+            if (fs.existsSync(globalConfigFile)) {
+                const globalData = JSON.parse(fs.readFileSync(globalConfigFile, 'utf8'));
+                if (!token && globalData.token) token = globalData.token;
+                if (!apiUrl && globalData.api) apiUrl = globalData.api;
+            }
+        } catch (e) {}
+    }
+
+    if (!apiUrl) {
+        apiUrl = 'https://engram.bamacharan.com';
+    }
+
+    return { token, apiUrl };
+}
+
 async function main() {
     try {
         let inputData = '';
-        // Read from stdin with a timeout
         const stdin = process.stdin;
         if (!stdin.isTTY) {
             stdin.setEncoding('utf8');
@@ -55,9 +91,8 @@ async function main() {
             }
         }
 
-        const apiUrl = process.env.ENGRAM_API || process.env.DEVPRACTICE_API || 'http://localhost:3000';
+        const { token, apiUrl } = resolveConfig();
         const endpoint = apiUrl.replace(/\/$/, '') + '/api/capture';
-        const token = process.env.ENGRAM_TOKEN || process.env.DEVPRACTICE_TOKEN || '';
 
         const capturePayload = {
             event_type: payloadObj.event_type || payloadObj.event || process.env.ENGRAM_EVENT || process.env.DEVPRACTICE_EVENT || 'unknown',
