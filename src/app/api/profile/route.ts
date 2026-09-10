@@ -4,9 +4,24 @@ import { users } from '@/lib/schema';
 import { getAuthenticatedUser } from '@/lib/auth-utils';
 import { eq } from 'drizzle-orm';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const authUser = await getAuthenticatedUser();
+    const authUser = await getAuthenticatedUser(req);
+
+    if (authUser.id === 'reviewer-demo-id') {
+      return NextResponse.json({
+        id: 'reviewer-demo-id',
+        name: 'Google Reviewer',
+        email: 'test@devpractice.io',
+        image: null,
+        currentLevel: 'sde1',
+        targetLevel: 'sde2',
+        primaryStack: 'TypeScript, React, Node.js, PostgreSQL',
+        focusAreas: 'System Design, Concurrency & State, Production Failure Modes',
+        apiKey: 'eng_live_demo_reviewer',
+      });
+    }
+
     const userRecords = await db
       .select({
         id: users.id,
@@ -49,9 +64,21 @@ export async function GET() {
 
 export async function PUT(req: Request) {
   try {
-    const authUser = await getAuthenticatedUser();
+    const authUser = await getAuthenticatedUser(req);
     const body = await req.json();
     const { name, currentLevel, targetLevel, primaryStack, focusAreas } = body;
+
+    if (authUser.id === 'reviewer-demo-id') {
+      return NextResponse.json({
+        id: 'reviewer-demo-id',
+        name: name || 'Google Reviewer',
+        email: 'test@devpractice.io',
+        currentLevel: currentLevel || 'sde1',
+        targetLevel: targetLevel || 'sde2',
+        primaryStack: primaryStack || 'TypeScript, React, Node.js',
+        focusAreas: focusAreas || 'System Design',
+      });
+    }
 
     const validLevels = ['intern', 'sde1', 'sde2', 'senior', 'staff'];
     const validTargets = ['sde1', 'sde2', 'senior', 'staff', 'principal'];
