@@ -3,19 +3,29 @@ import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db';
-import { users } from './schema';
+import { users, accounts, sessions, verificationTokens } from './schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
 export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(db) as any,
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }) as any,
   session: {
     strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/login',
+    error: '/login',
   },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({
       name: 'Credentials',

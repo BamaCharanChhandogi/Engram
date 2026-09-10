@@ -4,6 +4,7 @@ export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
   email: text('email').unique().notNull(),
   name: text('name'),
+  emailVerified: timestamp('email_verified', { mode: 'date' }),
   image: text('image'),
   passwordHash: text('password_hash'),
   githubId: text('github_id').unique(),
@@ -38,8 +39,7 @@ export const accounts = pgTable(
 );
 
 export const sessions = pgTable('sessions', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  sessionToken: text('session_token').unique().notNull(),
+  sessionToken: text('session_token').primaryKey(),
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
