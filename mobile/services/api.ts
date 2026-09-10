@@ -22,6 +22,7 @@ export interface Question {
   difficulty: 'easy' | 'medium' | 'hard';
   questionText: string;
   sourceContext?: string;
+  codeContext?: string;
   referenceAnswer?: string;
   explanation?: string;
   userAnswer?: {
@@ -142,9 +143,13 @@ export const Api = {
     try {
       const res = await request('/api/practice/today');
       if (res.ok) {
-        return await res.json();
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.questions)) return data.questions;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log('Error fetching today questions', e);
+    }
     return [];
   },
 
@@ -159,12 +164,21 @@ export const Api = {
     throw new Error('Failed to submit answer');
   },
 
-  async generateQuestions() {
-    const res = await request('/api/generate', {
-      method: 'POST',
-      body: JSON.stringify({}),
-    });
-    return res;
+  async generateQuestions(): Promise<Question[]> {
+    try {
+      const res = await request('/api/generate', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.questions)) return data.questions;
+      }
+    } catch (e) {
+      console.log('Error generating questions', e);
+    }
+    return [];
   },
 
   async getStandupPrep() {

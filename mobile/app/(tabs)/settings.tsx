@@ -4,42 +4,100 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
-  Switch,
   ActivityIndicator,
   Platform,
   Linking,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/Theme';
 import { Api, UserProfile } from '../../services/api';
+import { NotificationService } from '../../services/notifications';
+
+// Custom Elite Toggle Component matching Engram website luxury aesthetics
+interface EliteToggleProps {
+  value: boolean;
+  onValueChange: (val: boolean) => void;
+  disabled?: boolean;
+}
+
+const EliteToggle: React.FC<EliteToggleProps> = ({ value, onValueChange, disabled }) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.85}
+      disabled={disabled}
+      onPress={() => onValueChange(!value)}
+      style={[
+        styles.toggleTrack,
+        value ? styles.toggleTrackActive : styles.toggleTrackInactive,
+      ]}
+    >
+      <View
+        style={[
+          styles.toggleThumb,
+          value ? styles.toggleThumbActive : styles.toggleThumbInactive,
+        ]}
+      />
+    </TouchableOpacity>
+  );
+};
 
 export default function SettingsScreen() {
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [copiedKey, setCopiedKey] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    loadProfile();
+    loadSettingsData();
   }, []);
 
-  const loadProfile = async () => {
+  const loadSettingsData = async () => {
     setLoading(true);
     try {
-      const data = await Api.getProfile();
+      const [data, notifActive] = await Promise.all([
+        Api.getProfile(),
+        NotificationService.isEnabled(),
+      ]);
       setProfile(data);
+      setNotificationsEnabled(notifActive);
     } catch (e) {
       console.log('Error loading profile', e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleNotifications = async (newVal: boolean) => {
+    Haptics.selectionAsync();
+    if (newVal) {
+      const success = await NotificationService.scheduleDailyReminder();
+      if (success) {
+        setNotificationsEnabled(true);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        await NotificationService.sendTestNotification();
+      } else {
+        setNotificationsEnabled(false);
+        Alert.alert(
+          'Notification Permission',
+          'Please enable notifications for Engram in your phone settings to receive daily recall prompt reps at standup time.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Open Settings', onPress: () => Linking.openSettings() },
+          ]
+        );
+      }
+    } else {
+      await NotificationService.cancelDailyReminder();
+      setNotificationsEnabled(false);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
@@ -107,10 +165,11 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
           <Text style={styles.title}>Settings</Text>
@@ -189,22 +248,19 @@ export default function SettingsScreen() {
               </Text>
             </View>
 
-            {/* Notification Preferences */}
+            {/* Notification Preferences with Custom Elite Toggle */}
             <View style={styles.card}>
               <Text style={styles.cardSectionLabel}>PREFERENCES</Text>
               <View style={styles.preferenceRow}>
                 <View style={styles.prefTextContainer}>
                   <Text style={styles.prefTitle}>Daily Recall Reminders</Text>
-                  <Text style={styles.prefSub}>Receive prompt reps at your configured standup time</Text>
+                  <Text style={styles.prefSub}>
+                    Receive prompt reps at your configured standup time (6:00 PM)
+                  </Text>
                 </View>
-                <Switch
+                <EliteToggle
                   value={notificationsEnabled}
-                  onValueChange={(val) => {
-                    Haptics.selectionAsync();
-                    setNotificationsEnabled(val);
-                  }}
-                  trackColor={{ false: Colors.border, true: Colors.accent }}
-                  thumbColor={notificationsEnabled ? Colors.black : Colors.textTertiary}
+                  onValueChange={handleToggleNotifications}
                 />
               </View>
             </View>
@@ -221,7 +277,7 @@ export default function SettingsScreen() {
                   <Feather name="shield" size={15} color={Colors.textSecondary} />
                   <Text style={styles.legalText}>Official Privacy Policy</Text>
                 </View>
-                <Feather name="external-link" size={13} color={Colors.textTertiary} />
+                <Feather name="arrow-up-right" size={14} color={Colors.textTertiary} />
               </TouchableOpacity>
 
               <View style={styles.legalDivider} />
@@ -235,7 +291,7 @@ export default function SettingsScreen() {
                   <Feather name="globe" size={15} color={Colors.textSecondary} />
                   <Text style={styles.legalText}>Web Account Deletion Portal</Text>
                 </View>
-                <Feather name="external-link" size={13} color={Colors.textTertiary} />
+                <Feather name="arrow-up-right" size={14} color={Colors.textTertiary} />
               </TouchableOpacity>
             </View>
 
@@ -289,7 +345,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? 36 : 12,
+    paddingTop: 12,
     paddingBottom: 40,
   },
   header: {
@@ -418,11 +474,11 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: Colors.accent,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     borderRadius: 9999,
   },
   copiedPill: {
-    backgroundColor: 'rgba(52, 211, 153, 0.1)',
+    backgroundColor: 'rgba(52, 211, 153, 0.15)',
     borderWidth: 1,
     borderColor: Colors.success,
   },
@@ -443,7 +499,7 @@ const styles = StyleSheet.create({
   },
   prefTextContainer: {
     flex: 1,
-    paddingRight: 12,
+    paddingRight: 16,
   },
   prefTitle: {
     fontSize: 14,
@@ -453,7 +509,39 @@ const styles = StyleSheet.create({
   prefSub: {
     fontSize: 11,
     color: Colors.textTertiary,
-    marginTop: 2,
+    marginTop: 3,
+    lineHeight: 16,
+  },
+  // Elite Custom Toggle
+  toggleTrack: {
+    width: 46,
+    height: 26,
+    borderRadius: 13,
+    padding: 3,
+    justifyContent: 'center',
+  },
+  toggleTrackActive: {
+    backgroundColor: Colors.accent,
+    borderWidth: 1,
+    borderColor: Colors.accent,
+  },
+  toggleTrackInactive: {
+    backgroundColor: '#161616',
+    borderWidth: 1,
+    borderColor: '#262626',
+  },
+  toggleThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  },
+  toggleThumbActive: {
+    backgroundColor: '#050505',
+    alignSelf: 'flex-end',
+  },
+  toggleThumbInactive: {
+    backgroundColor: '#666666',
+    alignSelf: 'flex-start',
   },
   legalRow: {
     flexDirection: 'row',

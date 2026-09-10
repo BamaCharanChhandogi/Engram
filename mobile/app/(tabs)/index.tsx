@@ -8,9 +8,10 @@ import {
   ScrollView,
   ActivityIndicator,
   Modal,
-  SafeAreaView,
   Platform,
+  Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
@@ -50,7 +51,7 @@ export default function PracticeScreen() {
       ]);
       setProfile(userProf);
 
-      if (todayQ && todayQ.length > 0) {
+      if (Array.isArray(todayQ) && todayQ.length > 0) {
         setQuestions(todayQ);
         const firstUnanswered = todayQ.findIndex((q) => !q.userAnswer);
         if (firstUnanswered !== -1) {
@@ -62,6 +63,8 @@ export default function PracticeScreen() {
           setEvaluation(todayQ[0].userAnswer?.aiEvaluation || null);
           setAnswerText(todayQ[0].userAnswer?.answerText || '');
         }
+      } else {
+        setQuestions([]);
       }
     } catch (e) {
       console.log('Error loading practice data', e);
@@ -74,20 +77,32 @@ export default function PracticeScreen() {
     setLoading(true);
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      await Api.generateQuestions();
-      const updated = await Api.getTodayQuestions();
-      setQuestions(updated);
-      setCurrentIndex(0);
-      setEvaluation(null);
-      setAnswerText('');
-    } catch (e) {
+      const generated = await Api.generateQuestions();
+      const updated = (Array.isArray(generated) && generated.length > 0)
+        ? generated
+        : await Api.getTodayQuestions();
+
+      if (Array.isArray(updated) && updated.length > 0) {
+        setQuestions(updated);
+        setCurrentIndex(0);
+        setEvaluation(updated[0].userAnswer?.aiEvaluation || null);
+        setAnswerText(updated[0].userAnswer?.answerText || '');
+      } else {
+        Alert.alert(
+          'Daily Reps',
+          'No new session diffs recorded yet. Start coding in your terminal with engram-recall or try again shortly.'
+        );
+      }
+    } catch (e: any) {
       console.log('Error generating questions', e);
+      Alert.alert('Generation Error', e.message || 'Failed to generate questions');
     } finally {
       setLoading(false);
     }
   };
 
-  const currentQ = questions[currentIndex];
+  const hasQuestions = Array.isArray(questions) && questions.length > 0;
+  const currentQ = hasQuestions && currentIndex < questions.length ? questions[currentIndex] : null;
 
   const handleSubmitAnswer = async () => {
     if (!currentQ || !answerText.trim() || isSubmitting) return;
@@ -99,7 +114,6 @@ export default function PracticeScreen() {
       if (res && res.evaluation) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         setEvaluation(res.evaluation);
-        // update questions state locally
         const updated = [...questions];
         updated[currentIndex] = {
           ...currentQ,
@@ -110,20 +124,21 @@ export default function PracticeScreen() {
         };
         setQuestions(updated);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log('Error submitting answer', e);
+      Alert.alert('Submission Error', e.message || 'Could not submit answer for evaluation.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleNextQuestion = () => {
-    if (currentIndex < questions.length - 1) {
+    if (hasQuestions && currentIndex < questions.length - 1) {
       Haptics.selectionAsync();
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
       const nextQ = questions[nextIndex];
-      if (nextQ.userAnswer) {
+      if (nextQ && nextQ.userAnswer) {
         setAnswerText(nextQ.userAnswer.answerText);
         setEvaluation(nextQ.userAnswer.aiEvaluation);
       } else {
@@ -135,12 +150,12 @@ export default function PracticeScreen() {
   };
 
   const handlePrevQuestion = () => {
-    if (currentIndex > 0) {
+    if (hasQuestions && currentIndex > 0) {
       Haptics.selectionAsync();
       const prevIndex = currentIndex - 1;
       setCurrentIndex(prevIndex);
       const prevQ = questions[prevIndex];
-      if (prevQ.userAnswer) {
+      if (prevQ && prevQ.userAnswer) {
         setAnswerText(prevQ.userAnswer.answerText);
         setEvaluation(prevQ.userAnswer.aiEvaluation);
       } else {
@@ -193,11 +208,12 @@ export default function PracticeScreen() {
   });
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         {/* Top App Bar */}
         <View style={styles.topBar}>
@@ -266,6 +282,10 @@ export default function PracticeScreen() {
               <Text style={styles.generateButtonText}>Generate Daily Reps</Text>
             </TouchableOpacity>
           </View>
+        ) : !currentQ ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={Colors.accent} />
+          </View>
         ) : (
           /* Active Question Deck */
           <View style={styles.questionDeck}>
@@ -325,7 +345,7 @@ export default function PracticeScreen() {
               <Text style={styles.questionPrompt}>{currentQ.questionText}</Text>
 
               {/* Source Context Accordion */}
-              {currentQ.sourceContext && (
+              {(currentQ.codeContext || currentQ.sourceContext) && (
                 <View style={styles.contextContainer}>
                   <TouchableOpacity
                     style={styles.contextHeader}
@@ -345,7 +365,7 @@ export default function PracticeScreen() {
 
                   {showCodeDiff && (
                     <View style={styles.diffBox}>
-                      <Text style={styles.diffText}>{currentQ.sourceContext}</Text>
+                      <Text style={styles.diffText}>{currentQ.codeContext || currentQ.sourceContext}</Text>
                     </View>
                   )}
                 </View>
@@ -582,7 +602,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? 36 : 12,
+    paddingTop: 12,
     paddingBottom: 40,
   },
   topBar: {
