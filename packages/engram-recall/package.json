@@ -1,0 +1,30 @@
+﻿{
+  "name": "engram-recall",
+  "version": "1.0.0",
+  "description": "Active recall layer for AI coding agents (Claude Code, Cursor, Codex, Antigravity)",
+  "main": "bin/engram.js",
+  "bin": {
+    "engram": "./bin/engram.js",
+    "engram-recall": "./bin/engram.js"
+  },
+  "files": [
+    "bin",
+    "shared",
+    "README.md"
+  ],
+  "keywords": [
+    "engram",
+    "active-recall",
+    "ai-agent",
+    "cursor",
+    "claude-code",
+    "codex",
+    "developer-productivity"
+  ],
+  "author": "Engram Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BamaCharanChhandogi/Engram.git"
+  }
+}

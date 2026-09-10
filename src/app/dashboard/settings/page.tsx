@@ -31,32 +31,32 @@ export default function SettingsPage() {
 
   const tools = [
     {
-      id: 'claude-code',
-      name: 'Claude Code CLI',
-      badge: 'Official Plugin',
-      desc: 'Hooks into UserPromptSubmit, PostToolUse (Write/Edit/Bash), and Stop lifecycle events.',
-      command: `claude plugin install engram --api-key=${apiToken}`,
+      id: 'codex',
+      name: 'OpenAI Codex CLI',
+      badge: 'CLI Daemon',
+      desc: 'Hooks into SessionStart, UserPromptSubmit, and PostToolUse lifecycle events.',
+      command: `npx engram-recall init --codex --key=${apiToken}`,
     },
     {
       id: 'cursor',
       name: 'Cursor IDE',
       badge: 'Workspace Hooks',
       desc: 'Captures beforeSubmitPrompt and afterFileEdit non-blockingly.',
-      command: `npx engram init --cursor --key=${apiToken}`,
-    },
-    {
-      id: 'codex',
-      name: 'OpenAI Codex CLI',
-      badge: 'CLI Daemon',
-      desc: 'Hooks into SessionStart, UserPromptSubmit, and PostToolUse.',
-      command: `npx engram init --codex --key=${apiToken}`,
+      command: `npx engram-recall init --cursor --key=${apiToken}`,
     },
     {
       id: 'antigravity',
       name: 'Google Antigravity',
       badge: 'Adapter Active',
       desc: 'Observes PreToolUse, PostToolUse, and Stop via local adapter.',
-      command: `npx engram init --antigravity --key=${apiToken}`,
+      command: `npx engram-recall init --antigravity --key=${apiToken}`,
+    },
+    {
+      id: 'claude-code',
+      name: 'Claude Code CLI',
+      badge: 'Official Plugin',
+      desc: 'Hooks into UserPromptSubmit, PostToolUse (Write/Edit/Bash), and Stop lifecycle events.',
+      command: `claude plugin install engram --api-key=${apiToken}`,
     },
   ];
 

@@ -11,6 +11,7 @@
     "mcp": "node mcp-server/index.js"
   },
   "bin": {
+    "engram": "./bin/engram.js",
     "engram-watch": "./scripts/engram-watch.js",
     "engram-mcp": "./mcp-server/index.js"
   },
