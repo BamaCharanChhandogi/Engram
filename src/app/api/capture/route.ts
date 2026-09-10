@@ -2,14 +2,28 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users, captures, streaks } from '@/lib/schema';
 
+import { eq } from 'drizzle-orm';
+
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get('authorization');
     const token = authHeader?.split(' ')[1];
 
+    let userId: string | null = null;
+
+    if (token) {
+      // 1. Look up user by their personal Engram Ingestion Key
+      const userMatch = await db.select().from(users).where(eq(users.apiKey, token)).limit(1);
+      if (userMatch.length > 0) {
+        userId = userMatch[0].id;
+      }
+    }
+
     const validSecret = process.env.CAPTURE_API_SECRET || 'engram-capture-secret';
-    if (!token || (token !== validSecret && token !== 'devpractice-capture-secret' && token !== 'engram-capture-secret')) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    const isMasterSecret = token === validSecret || token === 'devpractice-capture-secret' || token === 'engram-capture-secret';
+
+    if (!userId && !isMasterSecret) {
+      return NextResponse.json({ message: 'Unauthorized: Invalid or missing Engram API Key' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -26,7 +40,9 @@ export async function POST(req: Request) {
       else if (eventName.includes('Stop') || eventName.includes('End')) normalizedEventType = 'session_end';
     }
 
-    let userId = req.headers.get('x-user-id') || req.headers.get('X-User-Id');
+    if (!userId) {
+      userId = req.headers.get('x-user-id') || req.headers.get('X-User-Id');
+    }
     
     if (!userId) {
       const existingUsers = await db.select().from(users).orderBy(users.createdAt).limit(1);

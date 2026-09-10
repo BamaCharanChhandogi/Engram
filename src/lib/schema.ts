@@ -8,6 +8,11 @@ export const users = pgTable('users', {
   image: text('image'),
   passwordHash: text('password_hash'),
   githubId: text('github_id').unique(),
+  currentLevel: text('current_level').default('sde1'),
+  targetLevel: text('target_level').default('sde2'),
+  primaryStack: text('primary_stack').default('TypeScript, React, Node.js'),
+  focusAreas: text('focus_areas').default('System Design, Concurrency & State, Production Failure Modes'),
+  apiKey: text('api_key').unique(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -91,6 +96,7 @@ export const questions = pgTable(
     referenceAnswer: text('reference_answer'),
     sourceCaptureIds: text('source_capture_ids').array().notNull(),
     difficulty: text('difficulty').notNull(),
+    agentSource: text('agent_source').default('claude-code'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
   (table) => ({

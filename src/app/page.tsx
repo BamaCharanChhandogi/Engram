@@ -5,142 +5,143 @@ import { useState } from 'react';
 
 export default function LandingPage() {
   const [annualBilling, setAnnualBilling] = useState(true);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#09090b]/80 border-b border-zinc-800/80">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#050505]/80">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-mono font-bold text-xs shadow-xs shadow-indigo-500/20">
-              //
-            </div>
-            <span className="font-semibold text-sm tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-              Engram
-            </span>
+          <Link href="/" className="font-serif text-xl text-[var(--text-primary)] tracking-tight">
+            Engram
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-zinc-400">
-            <a href="#how-it-works" className="hover:text-zinc-200 transition-colors">How it works</a>
-            <a href="#problem" className="hover:text-zinc-200 transition-colors">The 17% Problem</a>
-            <a href="#pricing" className="hover:text-zinc-200 transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-zinc-200 transition-colors">FAQ</a>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-[var(--text-secondary)]">
+            <a href="#problem" className="hover:text-[var(--text-primary)] transition-colors">Problem</a>
+            <a href="#how-it-works" className="hover:text-[var(--text-primary)] transition-colors">How it works</a>
+            <a href="#pricing" className="hover:text-[var(--text-primary)] transition-colors">Pricing</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link 
-              href="/login" 
-              className="text-xs font-mono px-3.5 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-800/60 transition-colors"
+            <Link
+              href="/login"
+              className="text-sm px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
-              Sign In
+              Log in
             </Link>
-            <Link 
-              href="/register" 
-              className="text-xs font-medium px-4 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-xs shadow-indigo-500/20"
+            <Link
+              href="/register"
+              className="text-sm font-medium px-5 py-2 rounded-full bg-[var(--accent)] text-[#050505] hover:bg-[var(--accent-hover)] transition-all"
             >
-              Get Started
+              Get started
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative pt-24 pb-20 px-6 border-b border-zinc-800/60 overflow-hidden">
-          {/* Subtle glow backdrop */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-indigo-600/10 blur-[120px] pointer-events-none rounded-full" />
+        {/* Hero */}
+        <section className="relative pt-28 pb-20 px-6 overflow-hidden">
+          {/* Warm ambient glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[var(--accent)] opacity-[0.04] blur-[150px] pointer-events-none rounded-full" />
 
-          <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-            {/* Kicker badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-[11px] font-mono tracking-wider uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              Cognitive Retention Layer for AI Coding
-            </div>
+          <div className="max-w-5xl mx-auto relative z-10">
+            <div className="max-w-3xl">
+              <p className="text-sm text-[var(--accent)] font-medium mb-6">
+                Cognitive retention for AI-assisted development
+              </p>
 
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-zinc-100 leading-[1.1]">
-              Your AI writes the code.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 via-zinc-300 to-indigo-400">
-                We make sure you understand it.
-              </span>
-            </h1>
+              <h1 className="font-serif text-5xl sm:text-7xl text-[var(--text-primary)] leading-[1.05] mb-6">
+                Your AI writes the code.
+                <br />
+                <span className="text-[var(--text-secondary)]">
+                  Make sure you understand it.
+                </span>
+              </h1>
 
-            <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto font-normal leading-relaxed">
-              Empirical trials show a <strong className="text-zinc-200">17% decline in debugging proficiency</strong> among developers using AI assistants. Engram silently captures your session diffs and turns them into 5-minute active recall practice.
-            </p>
+              <p className="text-lg text-[var(--text-secondary)] max-w-xl leading-relaxed mb-10">
+                Studies show a 17% decline in debugging proficiency among developers using AI assistants. Engram captures your session diffs and turns them into 5-minute active recall practice.
+              </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
-              <Link 
-                href="/register" 
-                className="w-full sm:w-auto px-6 py-3 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-md shadow-indigo-600/20 text-center"
-              >
-                Connect Your Agent Free
-              </Link>
-              <a 
-                href="#how-it-works" 
-                className="w-full sm:w-auto px-6 py-3 rounded-md bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-mono transition-colors text-center"
-              >
-                Inspect The Architecture →
-              </a>
-            </div>
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <Link
+                  href="/register"
+                  className="px-7 py-3 rounded-full bg-[var(--accent)] text-[#050505] text-sm font-medium hover:bg-[var(--accent-hover)] transition-all"
+                >
+                  Start for free
+                </Link>
+                <a
+                  href="#how-it-works"
+                  className="px-7 py-3 rounded-full border border-[var(--border-focus)] text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] transition-all"
+                >
+                  See how it works
+                </a>
+              </div>
 
-            {/* Agent badges */}
-            <div className="pt-8 flex flex-wrap items-center justify-center gap-6 text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
-              <span>Claude Code</span>
-              <span className="text-zinc-800">•</span>
-              <span>Cursor IDE</span>
-              <span className="text-zinc-800">•</span>
-              <span>OpenAI Codex CLI</span>
-              <span className="text-zinc-800">•</span>
-              <span>Google Antigravity</span>
+              {/* Agent compatibility */}
+              <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-[var(--text-tertiary)]">
+                <span>Works with</span>
+                <span className="text-[var(--text-secondary)]">Claude Code</span>
+                <span className="text-[var(--text-secondary)]">Cursor</span>
+                <span className="text-[var(--text-secondary)]">Codex CLI</span>
+                <span className="text-[var(--text-secondary)]">Antigravity</span>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Terminal / Live Preview Mockup */}
-          <div className="max-w-4xl mx-auto mt-16 rounded-lg border border-zinc-800 bg-[#0c0c0e] shadow-2xl overflow-hidden">
-            <div className="px-4 py-3 border-b border-zinc-800/80 bg-zinc-900/60 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <span className="ml-2 text-xs font-mono text-zinc-400">session_capture.ts — active recall pipeline</span>
-              </div>
-              <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                Hook: Non-blocking (0ms overhead)
-              </span>
-            </div>
-
-            <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-[#0a0a0c]">
-              {/* Left Column: What your AI did */}
-              <div className="space-y-3">
-                <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                  <span>01 // Local Session Captured</span>
-                  <span>14:22:01</span>
-                </div>
-                <div className="p-3.5 rounded bg-[#121215] border border-zinc-800/80 font-mono text-xs space-y-2 text-zinc-300">
-                  <p className="text-indigo-400">&gt; User prompt:</p>
-                  <p className="text-zinc-300 italic pl-3 border-l-2 border-indigo-500/40">"Add idempotent stripe refund handler with database state lock"</p>
-                  <p className="text-zinc-500 pt-2 text-[11px]">// PostToolUse diff captured: +24 lines in payment.ts</p>
-                </div>
-              </div>
-
-              {/* Right Column: What Engram tests you on */}
-              <div className="space-y-3">
-                <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
-                  <span>02 // Generated Active Recall</span>
-                  <span className="text-indigo-400">Gemini 3.6 Flash</span>
-                </div>
-                <div className="p-3.5 rounded bg-[#121215] border border-zinc-800/80 font-sans text-xs space-y-2">
-                  <div className="flex items-center gap-2 font-mono text-[10px]">
-                    <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">DEBUGGING</span>
-                    <span className="text-zinc-500">HARD</span>
+        {/* Terminal Preview */}
+        <section className="px-6 pb-32">
+          <div className="max-w-5xl mx-auto">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] overflow-hidden">
+              {/* Window chrome */}
+              <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#333]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#333]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#333]" />
                   </div>
-                  <p className="text-zinc-200 font-medium leading-relaxed">
-                    "If Stripe refund succeeds but local DB transaction fails, how does your idempotency key prevent duplicate refunds on caller retry?"
-                  </p>
-                  <div className="pt-2 text-[11px] font-mono text-zinc-500 flex items-center justify-between border-t border-zinc-800/60">
-                    <span>Expected: 15-minute recall</span>
-                    <span className="text-emerald-400 font-medium">+15 XP / Streak</span>
+                  <span className="text-sm text-[var(--text-tertiary)]">session_capture.ts</span>
+                </div>
+                <span className="text-sm text-[var(--success)] flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
+                  Active
+                </span>
+              </div>
+
+              <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left: Captured */}
+                <div className="space-y-4">
+                  <div className="text-sm text-[var(--text-tertiary)]">Session captured</div>
+                  <div className="p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] space-y-3">
+                    <p className="text-sm text-[var(--accent)]">User prompt:</p>
+                    <p className="text-sm text-[var(--text-secondary)] italic pl-4 border-l-2 border-[var(--accent)]/30">
+                      "Add idempotent stripe refund handler with database state lock"
+                    </p>
+                    <p className="text-sm text-[var(--text-tertiary)] pt-1">
+                      Diff captured: +24 lines in payment.ts
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right: Generated */}
+                <div className="space-y-4">
+                  <div className="text-sm text-[var(--text-tertiary)]">Generated recall question</div>
+                  <div className="p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full text-sm bg-[var(--accent-subtle)] text-[var(--accent)] border border-[var(--accent)]/20">
+                        Debugging
+                      </span>
+                      <span className="text-sm text-[var(--text-tertiary)]">Hard</span>
+                    </div>
+                    <p className="text-sm text-[var(--text-primary)] leading-relaxed">
+                      "If Stripe refund succeeds but local DB transaction fails, how does your idempotency key prevent duplicate refunds on caller retry?"
+                    </p>
+                    <div className="pt-2 text-sm text-[var(--text-tertiary)] flex items-center justify-between border-t border-[var(--border)]">
+                      <span>15-minute recall</span>
+                      <span className="text-[var(--success)]">+15 XP</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -148,40 +149,42 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* The Problem Section */}
-        <section id="problem" className="py-24 px-6 border-b border-zinc-800/60 bg-[#0c0c0e]">
-          <div className="max-w-5xl mx-auto space-y-12">
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 font-semibold">The Empirical Evidence</span>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-100">
-                The AI Cognitive Debt Crisis
+        {/* Problem Section */}
+        <section id="problem" className="py-32 px-6 bg-[var(--bg-surface)]">
+          <div className="max-w-5xl mx-auto">
+            <div className="max-w-2xl mb-16">
+              <p className="text-sm text-[var(--accent)] font-medium mb-4">The evidence</p>
+              <h2 className="font-serif text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight mb-4">
+                AI is eroding developer
+                <br className="hidden sm:block" />
+                mental models
               </h2>
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                Software velocity has multiplied 5x, but developer mental models are eroding.
+              <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+                Software velocity has multiplied, but the engineers shipping the code understand less of it every day.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-3">
-                <div className="text-3xl font-bold font-mono text-rose-400">-17%</div>
-                <h3 className="font-semibold text-sm text-zinc-200">Debugging Comprehension</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Stanford & Anthropic RCT testing 52 engineers documented a nearly two full letter-grade decline in post-task debugging proficiency when using AI.
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)]">
+                <div className="font-serif text-5xl text-[var(--danger)] mb-4">-17%</div>
+                <h3 className="text-base font-medium text-[var(--text-primary)] mb-2">Debugging comprehension</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Stanford and Anthropic RCT testing 52 engineers documented a nearly two full letter-grade decline in post-task debugging proficiency when using AI.
                 </p>
               </div>
 
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-3">
-                <div className="text-3xl font-bold font-mono text-amber-400">84% → 29%</div>
-                <h3 className="font-semibold text-sm text-zinc-200">Adoption vs Trust Gap</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Stack Overflow data reveals 84% adoption, but trust in accuracy plummeted below 30%. Engineers spend 80% of their day reviewing code they didn't write.
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)]">
+                <div className="font-serif text-5xl text-[var(--warning)] mb-4">84 to 29%</div>
+                <h3 className="text-base font-medium text-[var(--text-primary)] mb-2">Adoption vs trust gap</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Stack Overflow data reveals 84% adoption, but trust in accuracy plummeted below 30%. Engineers spend 80% of their day reviewing code they did not write.
                 </p>
               </div>
 
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-3">
-                <div className="text-3xl font-bold font-mono text-indigo-400">5 Min</div>
-                <h3 className="font-semibold text-sm text-zinc-200">Active Recall Solution</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)]">
+                <div className="font-serif text-5xl text-[var(--accent)] mb-4">5 min</div>
+                <h3 className="text-base font-medium text-[var(--text-primary)] mb-2">Active recall solution</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                   3 targeted questions a day from code you shipped preserves memory consolidation without slowing down daily coding velocity.
                 </p>
               </div>
@@ -190,241 +193,248 @@ export default function LandingPage() {
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="py-24 px-6 border-b border-zinc-800/60">
-          <div className="max-w-5xl mx-auto space-y-16">
-            <div className="text-center max-w-xl mx-auto space-y-3">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 font-semibold">Architecture</span>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-100">
-                Three Steps. Zero Friction.
+        <section id="how-it-works" className="py-32 px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="max-w-2xl mb-20">
+              <p className="text-sm text-[var(--accent)] font-medium mb-4">How it works</p>
+              <h2 className="font-serif text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight">
+                Three steps, zero friction
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-              <div className="space-y-4">
-                <div className="text-xs font-mono text-indigo-400 font-bold">01 // SILENT CAPTURE</div>
-                <h3 className="text-lg font-semibold text-zinc-100">Installs in 10 Seconds</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Hooks into Cursor, Claude Code, Codex, or Antigravity lifecycle events. Sends prompts and diffs to your dashboard in the background with zero terminal delay.
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+              <div>
+                <div className="font-serif text-6xl text-[var(--border-focus)] mb-6">01</div>
+                <h3 className="text-lg font-medium text-[var(--text-primary)] mb-3">Silent capture</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Hooks into Cursor, Claude Code, Codex, or Antigravity lifecycle events. Sends prompts and diffs to your dashboard in the background with zero delay.
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="text-xs font-mono text-indigo-400 font-bold">02 // GEMINI SYNTHESIS</div>
-                <h3 className="text-lg font-semibold text-zinc-100">Extracts Architectural Nuances</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Our pipeline inspects your diffs to generate 2 comprehension challenges, 1 edge-case debugging puzzle, and 1 system design question derived directly from your work.
+              <div>
+                <div className="font-serif text-6xl text-[var(--border-focus)] mb-6">02</div>
+                <h3 className="text-lg font-medium text-[var(--text-primary)] mb-3">AI synthesis</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Our pipeline inspects your diffs to generate comprehension challenges, edge-case debugging puzzles, and system design questions derived from your actual work.
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="text-xs font-mono text-indigo-400 font-bold">03 // DAILY REPS</div>
-                <h3 className="text-lg font-semibold text-zinc-100">Cement Real Mastery</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Take 5 minutes before your morning standup or at end of day to answer your reps. Get graded against senior engineering standards and build your streak.
+              <div>
+                <div className="font-serif text-6xl text-[var(--border-focus)] mb-6">03</div>
+                <h3 className="text-lg font-medium text-[var(--text-primary)] mb-3">Daily reps</h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  Take 5 minutes before standup or at end of day to answer your reps. Get graded against senior engineering standards and build your streak.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Pricing Section */}
-        <section id="pricing" className="py-24 px-6 border-b border-zinc-800/60 bg-[#0c0c0e]">
-          <div className="max-w-6xl mx-auto space-y-12">
-            <div className="text-center max-w-xl mx-auto space-y-4">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 font-semibold">Pricing</span>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-zinc-100">
-                Invest in Your Engineering Edge
+        {/* Pricing */}
+        <section id="pricing" className="py-32 px-6 bg-[var(--bg-surface)]">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center max-w-xl mx-auto mb-16">
+              <p className="text-sm text-[var(--accent)] font-medium mb-4">Pricing</p>
+              <h2 className="font-serif text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight mb-4">
+                Invest in your engineering edge
               </h2>
-              <p className="text-sm text-zinc-400">
-                Free for solo developers. Scale as your team's code output accelerates.
+              <p className="text-base text-[var(--text-secondary)] mb-8">
+                Free for solo developers. Scale as your team grows.
               </p>
 
-              {/* Annual toggle */}
-              <div className="inline-flex items-center gap-3 p-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-mono">
+              {/* Billing toggle */}
+              <div className="inline-flex items-center gap-1 p-1 rounded-full bg-[var(--bg-primary)] border border-[var(--border)] text-sm">
                 <button
                   onClick={() => setAnnualBilling(false)}
-                  className={`px-3 py-1 rounded-full transition-colors cursor-pointer ${!annualBilling ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  className={`px-4 py-1.5 rounded-full transition-colors cursor-pointer ${!annualBilling ? 'bg-[var(--bg-surface-hover)] text-[var(--text-primary)]' : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'}`}
                 >
                   Monthly
                 </button>
                 <button
                   onClick={() => setAnnualBilling(true)}
-                  className={`px-3 py-1 rounded-full transition-colors cursor-pointer flex items-center gap-1.5 ${annualBilling ? 'bg-indigo-600 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  className={`px-4 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-2 ${annualBilling ? 'bg-[var(--accent)] text-[#050505] font-medium' : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'}`}
                 >
-                  <span>Annual</span>
-                  <span className="text-[10px] text-emerald-300 font-bold">SAVE 20%</span>
+                  Annual
+                  <span className={`text-xs ${annualBilling ? 'text-[#050505]/70' : 'text-[var(--success)]'}`}>-20%</span>
                 </button>
               </div>
             </div>
 
-            {/* Pricing Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-              {/* Developer Free */}
-              <div className="p-8 rounded-lg bg-[#121215] border border-zinc-800/80 flex flex-col justify-between space-y-8">
-                <div className="space-y-6">
+              {/* Free */}
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] flex flex-col justify-between">
+                <div className="space-y-6 mb-8">
                   <div>
-                    <h3 className="font-semibold text-base text-zinc-200">Hobby Developer</h3>
-                    <p className="text-xs text-zinc-500 mt-1">Essential skill retention for individual engineers.</p>
+                    <h3 className="text-base font-medium text-[var(--text-primary)]">Hobby</h3>
+                    <p className="text-sm text-[var(--text-tertiary)] mt-1">For individual engineers getting started.</p>
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold font-mono text-zinc-100">$0</span>
-                    <span className="text-xs text-zinc-500 font-mono">/ forever</span>
+                    <span className="font-serif text-5xl text-[var(--text-primary)]">$0</span>
+                    <span className="text-sm text-[var(--text-tertiary)]">/ forever</span>
                   </div>
-                  <ul className="space-y-2.5 text-xs text-zinc-300 font-normal">
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> 3 practice questions / day
+                  <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> 3 practice questions / day
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> 7-day session history
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> 7-day session history
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> Standard Gemini 3.6 Flash engine
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> Gemini 3.6 Flash engine
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> Claude Code, Cursor, Codex hooks
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> All agent hooks included
                     </li>
                   </ul>
                 </div>
                 <Link
                   href="/register"
-                  className="w-full py-2.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-mono text-center uppercase tracking-wider transition-colors"
+                  className="w-full py-3 rounded-full border border-[var(--border-focus)] text-[var(--text-secondary)] text-sm text-center hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] transition-all"
                 >
-                  Start Free
+                  Start free
                 </Link>
               </div>
 
-              {/* Pro Tier (Highlighted) */}
-              <div className="p-8 rounded-lg bg-[#141419] border-2 border-indigo-500/80 relative flex flex-col justify-between space-y-8 shadow-xl shadow-indigo-500/10">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-[10px] uppercase tracking-widest font-semibold">
-                  Most Popular
-                </div>
-                <div className="space-y-6">
+              {/* Pro — Featured */}
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border-2 border-[var(--accent)]/40 flex flex-col justify-between relative">
+                <div className="space-y-6 mb-8">
                   <div>
-                    <h3 className="font-semibold text-base text-zinc-100">Professional Engineer</h3>
-                    <p className="text-xs text-zinc-400 mt-1">For daily AI coders building senior interview mastery.</p>
+                    <h3 className="text-base font-medium text-[var(--text-primary)]">Pro</h3>
+                    <p className="text-sm text-[var(--text-tertiary)] mt-1">For daily AI coders building mastery.</p>
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold font-mono text-zinc-100">
+                    <span className="font-serif text-5xl text-[var(--text-primary)]">
                       ${annualBilling ? '10' : '12'}
                     </span>
-                    <span className="text-xs text-zinc-500 font-mono">/ month</span>
+                    <span className="text-sm text-[var(--text-tertiary)]">/ month</span>
                   </div>
-                  <ul className="space-y-2.5 text-xs text-zinc-200 font-normal">
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-indigo-400 font-mono">✓</span> <strong>Unlimited</strong> daily practice questions
+                  <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--accent)]">&#10003;</span> <strong className="text-[var(--text-primary)]">Unlimited</strong> daily questions
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-indigo-400 font-mono">✓</span> <strong>Spaced Repetition Queue</strong> (retests bugs at 3, 7, 14 days)
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--accent)]">&#10003;</span> Spaced repetition queue
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-indigo-400 font-mono">✓</span> Deep reasoning evaluation (Gemini 2.5 Pro / Claude 3.7)
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--accent)]">&#10003;</span> Deep reasoning evaluation
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-indigo-400 font-mono">✓</span> <strong>Prompt Engineering Coach</strong> with auto-rewrites
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--accent)]">&#10003;</span> Prompt engineering coach
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-indigo-400 font-mono">✓</span> Permanent history & streak analytics
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--accent)]">&#10003;</span> Permanent history and analytics
                     </li>
                   </ul>
                 </div>
                 <Link
                   href="/register"
-                  className="w-full py-2.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold text-center uppercase tracking-wider transition-all shadow-md shadow-indigo-600/30"
+                  className="w-full py-3 rounded-full bg-[var(--accent)] text-[#050505] text-sm font-medium text-center hover:bg-[var(--accent-hover)] transition-all"
                 >
                   Upgrade to Pro
                 </Link>
               </div>
 
-              {/* Team Tier */}
-              <div className="p-8 rounded-lg bg-[#121215] border border-zinc-800/80 flex flex-col justify-between space-y-8">
-                <div className="space-y-6">
+              {/* Team */}
+              <div className="p-8 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] flex flex-col justify-between">
+                <div className="space-y-6 mb-8">
                   <div>
-                    <h3 className="font-semibold text-base text-zinc-200">Engineering Teams</h3>
-                    <p className="text-xs text-zinc-500 mt-1">For Tech Leads and CTOs safeguarding codebase quality.</p>
+                    <h3 className="text-base font-medium text-[var(--text-primary)]">Team</h3>
+                    <p className="text-sm text-[var(--text-tertiary)] mt-1">For tech leads safeguarding codebase quality.</p>
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold font-mono text-zinc-100">
+                    <span className="font-serif text-5xl text-[var(--text-primary)]">
                       ${annualBilling ? '24' : '29'}
                     </span>
-                    <span className="text-xs text-zinc-500 font-mono">/ seat / month</span>
+                    <span className="text-sm text-[var(--text-tertiary)]">/ seat / month</span>
                   </div>
-                  <ul className="space-y-2.5 text-xs text-zinc-300 font-normal">
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> Everything in Pro
+                  <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> Everything in Pro
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> <strong>Team Knowledge Distribution Map</strong>
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> Team knowledge distribution map
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> PR comprehension checks before merge
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> PR comprehension checks
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> Onboarding acceleration metrics
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> Onboarding acceleration metrics
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <span className="text-emerald-400 font-mono">✓</span> SAML SSO & Centralized billing
+                    <li className="flex items-center gap-3">
+                      <span className="text-[var(--success)]">&#10003;</span> SAML SSO and centralized billing
                     </li>
                   </ul>
                 </div>
                 <Link
                   href="/register"
-                  className="w-full py-2.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-mono text-center uppercase tracking-wider transition-colors"
+                  className="w-full py-3 rounded-full border border-[var(--border-focus)] text-[var(--text-secondary)] text-sm text-center hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] transition-all"
                 >
-                  Contact For Teams
+                  Contact for teams
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Technical FAQ */}
-        <section id="faq" className="py-24 px-6 border-b border-zinc-800/60">
-          <div className="max-w-4xl mx-auto space-y-12">
-            <div className="text-center space-y-3">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 font-semibold">Technical FAQ</span>
-              <h2 className="text-3xl font-bold tracking-tight text-zinc-100">Answers for Engineers</h2>
+        {/* FAQ */}
+        <section id="faq" className="py-32 px-6">
+          <div className="max-w-3xl mx-auto">
+            <div className="mb-16">
+              <p className="text-sm text-[var(--accent)] font-medium mb-4">FAQ</p>
+              <h2 className="font-serif text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight">
+                Answers for engineers
+              </h2>
             </div>
 
-            <div className="space-y-6">
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-2">
-                <h3 className="text-sm font-semibold text-zinc-100">Does my entire proprietary codebase get uploaded?</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  No. Hooks only observe active session diffs and user prompts. You can configure local repository blocklists (`.engramignore`), and our capture scripts operate strictly within the boundary you define.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-2">
-                <h3 className="text-sm font-semibold text-zinc-100">Will the hook slow down Cursor or Claude Code?</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  No. Hook scripts spawn as detached background processes and return immediately (`0ms` synchronous wait). If your internet drops or our server is under heavy load, the hook fails silently without interrupting your coding flow.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-2">
-                <h3 className="text-sm font-semibold text-zinc-100">How are practice questions generated?</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  We use Google Gemini 3.6 Flash and Claude models configured in structured JSON mode to inspect edge cases, concurrency hazards, and architectural patterns in your day's diffs.
-                </p>
-              </div>
+            <div className="divide-y divide-[var(--border)]">
+              {[
+                {
+                  q: 'Does my entire proprietary codebase get uploaded?',
+                  a: 'No. Hooks only observe active session diffs and user prompts. You can configure local repository blocklists (.engramignore), and our capture scripts operate strictly within the boundary you define.',
+                },
+                {
+                  q: 'Will the hook slow down Cursor or Claude Code?',
+                  a: 'No. Hook scripts spawn as detached background processes and return immediately (0ms synchronous wait). If your internet drops or our server is under load, the hook fails silently without interrupting your coding flow.',
+                },
+                {
+                  q: 'How are practice questions generated?',
+                  a: 'We use Google Gemini 3.6 Flash configured in structured JSON mode to inspect edge cases, concurrency hazards, and architectural patterns in your session diffs.',
+                },
+              ].map((item, i) => (
+                <div key={i} className="py-6">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between text-left cursor-pointer group"
+                  >
+                    <h3 className="text-base font-medium text-[var(--text-primary)] group-hover:text-white transition-colors pr-4">
+                      {item.q}
+                    </h3>
+                    <span className="text-[var(--text-tertiary)] text-xl shrink-0 transition-transform duration-200" style={{ transform: openFaq === i ? 'rotate(45deg)' : 'none' }}>
+                      +
+                    </span>
+                  </button>
+                  {openFaq === i && (
+                    <p className="text-sm text-[var(--text-secondary)] leading-relaxed mt-4 pr-12">
+                      {item.a}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-zinc-800/80 bg-[#09090b]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-indigo-600 text-white flex items-center justify-center font-bold text-[9px]">
-              D
-            </div>
-            <span>Engram © 2026</span>
-          </div>
+      <footer className="py-8 px-6 border-t border-[var(--border)]">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--text-tertiary)]">
+          <span className="font-serif">Engram</span>
           <div className="flex items-center gap-6">
-            <a href="#pricing" className="hover:text-zinc-300 transition-colors">Pricing</a>
-            <a href="#how-it-works" className="hover:text-zinc-300 transition-colors">Architecture</a>
-            <Link href="/login" className="hover:text-zinc-300 transition-colors">Dashboard</Link>
+            <a href="#pricing" className="hover:text-[var(--text-secondary)] transition-colors">Pricing</a>
+            <a href="#how-it-works" className="hover:text-[var(--text-secondary)] transition-colors">How it works</a>
+            <Link href="/login" className="hover:text-[var(--text-secondary)] transition-colors">Dashboard</Link>
           </div>
+          <span>2026</span>
         </div>
       </footer>
     </div>

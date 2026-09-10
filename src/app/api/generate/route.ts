@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { captures, questions } from '@/lib/schema';
+import { captures, questions, users } from '@/lib/schema';
 import { getAuthenticatedUser } from '@/lib/auth-utils';
 import { generateQuestions } from '@/lib/claude';
 import { eq, and, gte } from 'drizzle-orm';
@@ -37,7 +37,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'No captures found for today' }, { status: 404 });
     }
 
-    const questionsData = await generateQuestions(userCaptures);
+    // Query user profile for career level calibration
+    const userRecords = await db
+      .select({
+        currentLevel: users.currentLevel,
+        targetLevel: users.targetLevel,
+        primaryStack: users.primaryStack,
+        focusAreas: users.focusAreas,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    const userProfile = userRecords[0];
+
+    const questionsData = await generateQuestions(userCaptures, userProfile);
+
+    const primaryTool = userCaptures[0]?.tool || 'claude-code';
 
     const createdQuestions = await Promise.all(
       questionsData.map(async (q: any) => {
@@ -49,6 +65,7 @@ export async function POST(req: Request) {
           codeContext: q.codeContext || null,
           referenceAnswer: q.referenceAnswer || null,
           difficulty: q.difficulty || 'medium',
+          agentSource: primaryTool,
           sourceCaptureIds: q.sourceCaptureIds || [],
         }).returning();
         return result[0];

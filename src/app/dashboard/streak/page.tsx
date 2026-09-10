@@ -52,9 +52,9 @@ export default function StreakPage() {
     return (
       <div className="space-y-8 animate-pulse">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[1, 2, 3].map(i => <div key={i} className="h-24 bg-[#121215] rounded-lg border border-zinc-800"></div>)}
+          {[1, 2, 3].map(i => <div key={i} className="h-24 bg-[var(--bg-surface)] rounded-xl border border-[var(--border)]"></div>)}
         </div>
-        <div className="h-48 bg-[#121215] rounded-lg border border-zinc-800"></div>
+        <div className="h-48 bg-[var(--bg-surface)] rounded-xl border border-[var(--border)]"></div>
       </div>
     );
   }
@@ -68,75 +68,76 @@ export default function StreakPage() {
   return (
     <div className="space-y-8">
       {/* Top Header */}
-      <div className="pb-6 border-b border-zinc-800/80">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">
+      <div className="pb-6 border-b border-[var(--border)]">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="w-2 h-2 rounded-full bg-[var(--success)]" />
+          <span className="text-xs uppercase tracking-widest text-[var(--text-tertiary)] font-medium">
             Performance Metrics
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-100">Consistency & Recall History</h1>
-        <p className="text-xs text-zinc-400 mt-0.5">
+        <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[var(--text-primary)]">Consistency & Recall History</h1>
+        <p className="text-sm text-[var(--text-secondary)] mt-0.5">
           Spaced repetition retention rate based on daily practice reps.
         </p>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#121215] p-5 rounded-lg border border-zinc-800/80 space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+        <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border)] space-y-2">
+          <div className="flex items-center justify-between text-xs uppercase tracking-wider text-[var(--text-tertiary)] font-medium">
             <span>Current Streak</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">
-            {currentStreak} <span className="text-xs font-normal text-zinc-500 font-sans">{currentStreak === 1 ? 'day' : 'days'}</span>
+          <div className="font-serif text-4xl text-[var(--text-primary)]">
+            {currentStreak} <span className="text-xs font-normal text-[var(--text-secondary)] font-sans">{currentStreak === 1 ? 'day' : 'days'}</span>
           </div>
-          <p className="text-[11px] text-zinc-500">Daily practice active</p>
+          <p className="text-xs text-[var(--text-secondary)]">Daily practice active</p>
         </div>
 
-        <div className="bg-[#121215] p-5 rounded-lg border border-zinc-800/80 space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+        <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border)] space-y-2">
+          <div className="flex items-center justify-between text-xs uppercase tracking-wider text-[var(--text-tertiary)] font-medium">
             <span>Longest Streak</span>
-            <span className="text-zinc-600 font-mono text-xs">HIGH</span>
+            <span className="text-[var(--text-tertiary)] text-xs font-medium">HIGH</span>
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">
-            {longestStreak} <span className="text-xs font-normal text-zinc-500 font-sans">{longestStreak === 1 ? 'day' : 'days'}</span>
+          <div className="font-serif text-4xl text-[var(--text-primary)]">
+            {longestStreak} <span className="text-xs font-normal text-[var(--text-secondary)] font-sans">{longestStreak === 1 ? 'day' : 'days'}</span>
           </div>
-          <p className="text-[11px] text-zinc-500">Historical personal best</p>
+          <p className="text-xs text-[var(--text-secondary)]">Historical personal best</p>
         </div>
 
-        <div className="bg-[#121215] p-5 rounded-lg border border-zinc-800/80 space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+        <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border)] space-y-2">
+          <div className="flex items-center justify-between text-xs uppercase tracking-wider text-[var(--text-tertiary)] font-medium">
             <span>Questions Solved</span>
-            <span className="text-zinc-600 font-mono text-xs">CUMULATIVE</span>
+            <span className="text-[var(--text-tertiary)] text-xs font-medium">CUMULATIVE</span>
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">
+          <div className="font-serif text-4xl text-[var(--text-primary)]">
             {totalAnswered}
           </div>
-          <p className="text-[11px] text-zinc-500">Active recall reps completed</p>
+          <p className="text-xs text-[var(--text-secondary)]">Active recall reps completed</p>
         </div>
       </div>
 
       {/* Heatmap Section */}
-      <div className="bg-[#121215] p-6 rounded-lg border border-zinc-800/80 space-y-4">
+      <div className="bg-[var(--bg-surface)] p-6 rounded-2xl border border-[var(--border)] space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider font-mono text-xs">
+          <h2 className="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
             Practice Frequency Matrix
           </h2>
-          <span className="text-[11px] font-mono text-zinc-500">Trailing 5 weeks</span>
+          <span className="text-xs text-[var(--text-tertiary)]">Trailing 5 weeks</span>
         </div>
         <HeatmapCalendar data={heatmapData} />
       </div>
 
       {/* Past Answers History */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase tracking-wider">
-          <span>Audit Log // Past Reps</span>
+        <div className="flex items-center justify-between text-xs uppercase tracking-wider text-[var(--text-tertiary)] font-medium">
+          <span>Audit Log • Past Reps</span>
           <span>{historyList.length} recorded</span>
         </div>
 
         {historyList.length === 0 ? (
-          <div className="text-center py-12 bg-[#121215] rounded-lg border border-zinc-800/80">
-            <p className="text-xs text-zinc-500 font-mono">No answered questions on record. Submit your first rep in Today's Practice.</p>
+          <div className="text-center py-12 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border)]">
+            <p className="text-sm text-[var(--text-secondary)]">No answered questions on record. Submit your first rep in Today's Practice.</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -151,13 +152,13 @@ export default function StreakPage() {
               return (
                 <div 
                   key={idx} 
-                  className="bg-[#121215] px-4 py-3 rounded-md border border-zinc-800/80 flex items-center justify-between hover:border-zinc-700 transition-colors"
+                  className="bg-[var(--bg-surface)] px-4 py-3 rounded-xl border border-[var(--border)] flex items-center justify-between hover:border-[var(--border-focus)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-zinc-500">{formattedDate}</span>
-                    <span className="text-xs text-zinc-300 font-medium">Session Evaluation Recorded</span>
+                    <span className="text-xs text-[var(--text-secondary)]">{formattedDate}</span>
+                    <span className="text-sm text-[var(--text-primary)] font-medium">Session Evaluation Recorded</span>
                   </div>
-                  <div className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
+                  <div className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full border ${
                     score >= 80 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
                     score >= 50 ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
                     'bg-rose-500/10 border-rose-500/30 text-rose-400'

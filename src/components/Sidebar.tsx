@@ -39,6 +39,17 @@ const navItems = [
     ),
   },
   {
+    href: '/dashboard/profile',
+    label: 'Career Target',
+    icon: (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="6" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
+    ),
+  },
+  {
     href: '/dashboard/settings',
     label: 'Agent Integrations',
     icon: (
@@ -58,16 +69,13 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Top Header */}
-      <div className="md:hidden px-4 py-3 flex justify-between items-center border-b border-[var(--border)] bg-[#0c0c0e]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded bg-indigo-600 flex items-center justify-center text-white font-mono font-bold text-xs">
-            //
-          </div>
-          <span className="font-semibold text-sm tracking-tight text-zinc-100">Engram</span>
-        </div>
+      <div className="md:hidden px-4 py-3 flex justify-between items-center border-b border-[var(--border)] bg-[var(--bg-surface)]">
+        <Link href="/" className="flex items-center">
+          <span className="font-serif text-xl tracking-tight text-[var(--text-primary)]">Engram</span>
+        </Link>
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="p-1.5 rounded-md border border-zinc-800 text-zinc-400 hover:text-white"
+          className="p-1.5 rounded-full border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           aria-label="Toggle menu"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,31 +86,23 @@ export default function Sidebar() {
 
       {/* Main Sidebar */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-50 w-60 bg-[#0c0c0e] border-r border-zinc-800/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-60 bg-[var(--bg-surface)] border-r border-[var(--border)] transform transition-transform duration-200 ease-in-out md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } flex flex-col justify-between`}
       >
-        <div>
+        <div className="flex-1 overflow-y-auto">
           {/* Brand Logo */}
-          <div className="px-5 py-5 border-b border-zinc-800/60">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-mono font-bold text-xs shadow-sm shadow-indigo-500/20">
-                //
-              </div>
-              <div className="flex flex-col">
-                <span className="font-semibold text-sm tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-                  Engram
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                  Memory Layer
-                </span>
-              </div>
+          <div className="px-5 py-5 border-b border-[var(--border)]">
+            <Link href="/" className="flex items-center group">
+              <span className="font-serif text-2xl tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+                Engram
+              </span>
             </Link>
           </div>
 
           {/* Navigation Links */}
           <div className="px-3 py-4">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 px-3 mb-2 font-medium">
+            <div className="text-xs uppercase tracking-wider text-[var(--text-tertiary)] px-3 mb-2 font-medium">
               Navigation
             </div>
             <nav className="space-y-1">
@@ -113,13 +113,13 @@ export default function Sidebar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-all duration-150 ${
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-full text-sm font-medium transition-all duration-150 ${
                       isActive
-                        ? 'bg-zinc-800/80 text-white border border-zinc-700/60 shadow-xs'
-                        : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
+                        ? 'bg-[var(--accent-subtle)] text-[var(--text-primary)] border border-[var(--accent)]/20 shadow-xs'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
                     }`}
                   >
-                    <span className={isActive ? 'text-indigo-400' : 'text-zinc-500'}>
+                    <span className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-secondary)]'}>
                       {item.icon}
                     </span>
                     <span>{item.label}</span>
@@ -131,21 +131,31 @@ export default function Sidebar() {
         </div>
 
         {/* User Account / Footer */}
-        <div className="p-3 border-t border-zinc-800/60 bg-[#09090b]">
+        <div className="p-3 border-t border-[var(--border)] bg-[var(--bg-primary)] shrink-0">
           {session?.user ? (
             <div className="space-y-2">
-              <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-md bg-zinc-900/50 border border-zinc-800/40">
-                <div className="w-7 h-7 rounded-md bg-zinc-800 flex items-center justify-center text-xs font-mono font-medium text-zinc-200 border border-zinc-700/60 shrink-0">
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border)]">
+                <div className="w-7 h-7 rounded-full bg-[var(--border)] flex items-center justify-center text-xs font-medium text-[var(--text-primary)] shrink-0">
                   {session.user.name?.charAt(0) || session.user.email?.charAt(0) || 'D'}
                 </div>
                 <div className="text-xs overflow-hidden leading-tight flex-1">
-                  <p className="font-medium text-zinc-200 truncate">{session.user.name || 'Developer'}</p>
-                  <p className="text-[11px] text-zinc-500 font-mono truncate">{session.user.email}</p>
+                  <p className="font-medium text-[var(--text-primary)] truncate">{session.user.name || 'Developer'}</p>
+                  <p className="text-[11px] text-[var(--text-secondary)] truncate">{session.user.email}</p>
                 </div>
               </div>
+              <Link
+                href="/dashboard/profile"
+                className="w-full py-1.5 px-3 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--accent-subtle)] border border-[var(--border)] transition-colors flex items-center justify-between"
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                  <span>Target Calibration</span>
+                </span>
+                <span className="text-[10px] text-[var(--accent)] font-medium">Edit →</span>
+              </Link>
               <button 
                 onClick={() => signOut({ callbackUrl: '/login' })} 
-                className="w-full py-1.5 px-2.5 rounded-md text-xs font-mono text-zinc-500 hover:text-rose-400 hover:bg-rose-950/20 transition-colors flex items-center justify-between cursor-pointer"
+                className="w-full py-1.5 px-3 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors flex items-center justify-between cursor-pointer"
               >
                 <span>Disconnect</span>
                 <span>→</span>
@@ -154,7 +164,7 @@ export default function Sidebar() {
           ) : (
             <Link 
               href="/login" 
-              className="block w-full py-2 px-3 rounded-md text-center bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition-colors"
+              className="block w-full py-2 px-3 rounded-full text-center bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[#050505] text-xs font-medium transition-colors"
             >
               Sign In
             </Link>
