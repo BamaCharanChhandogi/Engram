@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeSubmitPrompt": [
+      {
+        "command": "node ../shared/capture.js",
+        "async": true
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "node ../shared/capture.js",
+        "async": true
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "node ../shared/capture.js",
+        "async": true
+      }
+    ],
+    "sessionStart": [
+      {
+        "command": "node ../shared/capture.js",
+        "async": true
+      }
+    ],
+    "stop": [
+      {
+        "command": "node ../shared/capture.js",
+        "async": true
+      }
+    ]
+  }
+}
