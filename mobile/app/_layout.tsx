@@ -1,24 +1,15 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
-import Feather from '@expo/vector-icons/Feather';
 import { Colors } from '../constants/Theme';
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
-    ...Feather.font,
+  // Preload font non-blockingly so app never hangs on startup spinner
+  useFonts({
+    feather: require('../assets/fonts/Feather.ttf'),
   });
-
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, backgroundColor: Colors.bgPrimary, justifyContent: 'center', alignItems: 'center' }}>
-        <StatusBar style="light" backgroundColor={Colors.bgPrimary} />
-        <ActivityIndicator size="large" color={Colors.accent} />
-      </View>
-    );
-  }
 
   return (
     <SafeAreaProvider>
@@ -38,4 +29,3 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
-

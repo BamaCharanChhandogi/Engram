@@ -34,7 +34,12 @@
       "expo-router",
       "expo-secure-store",
       "expo-asset",
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Feather.ttf"]
+        }
+      ],
       "expo-notifications"
     ],
     "experiments": {
