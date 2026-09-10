@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import QuestionCard from '@/components/QuestionCard';
+import QuickTargetModal from '@/components/QuickTargetModal';
 
 export default function DashboardPage() {
   const [questions, setQuestions] = useState<any[]>([]);
@@ -11,10 +12,22 @@ export default function DashboardPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
+  // Quick target modal state
+  const [showTargetModal, setShowTargetModal] = useState(false);
+
   // Standup prep state
   const [isGeneratingStandup, setIsGeneratingStandup] = useState(false);
   const [standupData, setStandupData] = useState<any>(null);
   const [showStandupModal, setShowStandupModal] = useState(false);
+  const [copiedStandup, setCopiedStandup] = useState(false);
+
+  const handleCopyStandup = () => {
+    if (!standupData) return;
+    const text = `**${standupData.headline}**\n\nKey Decisions:\n${(standupData.keyDecisions || []).map((d: string) => `• ${d}`).join('\n')}\n\nTrade-offs:\n${(standupData.tradeoffsConsidered || []).map((t: string) => `• ${t}`).join('\n')}\n\nRisks Mitigated:\n${(standupData.risksAndMitigations || []).map((r: string) => `• ${r}`).join('\n')}`;
+    navigator.clipboard.writeText(text);
+    setCopiedStandup(true);
+    setTimeout(() => setCopiedStandup(false), 2000);
+  };
 
   const fetchProfile = async () => {
     try {
@@ -146,7 +159,9 @@ export default function DashboardPage() {
               </>
             ) : (
               <>
-                <span className="text-[11px]">⚡</span>
+                <svg className="w-3.5 h-3.5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
                 <span>Standup & PR Brief</span>
               </>
             )}
@@ -188,12 +203,14 @@ export default function DashboardPage() {
           <span className="text-zinc-600 hidden sm:inline">•</span>
           <span className="text-zinc-400 hidden sm:inline">Calibrated for {targetLvl} interview depth</span>
         </div>
-        <Link
-          href="/dashboard/profile"
-          className="text-zinc-400 hover:text-white transition-colors shrink-0 text-xs"
+        <button
+          type="button"
+          onClick={() => setShowTargetModal(true)}
+          className="text-zinc-400 hover:text-[var(--accent)] transition-colors shrink-0 text-xs cursor-pointer flex items-center gap-1 font-medium"
         >
-          Edit Target →
-        </Link>
+          <span>Switch Target</span>
+          <span>→</span>
+        </button>
       </div>
 
       {statusMessage && (
@@ -213,22 +230,43 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : questions.length === 0 ? (
-        <div className="text-center py-20 px-6 bg-[var(--bg-surface)] rounded-xl border border-[var(--border)] space-y-4">
-          <div className="w-10 h-10 rounded-full bg-[var(--bg-surface-hover)] border border-[var(--border)] mx-auto flex items-center justify-center text-xs font-medium text-[var(--text-secondary)]">
-            0/0
+        <div className="py-14 px-6 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border)] space-y-5 text-center max-w-2xl mx-auto">
+          <div className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.08] mx-auto flex items-center justify-center text-[var(--accent)]">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
           </div>
-          <div className="space-y-1">
-            <h2 className="text-base font-semibold text-[var(--text-primary)]">No active practice questions</h2>
-            <p className="text-sm text-[var(--text-secondary)] max-w-sm mx-auto leading-relaxed">
-              When you code in Claude Code, Cursor, Codex, or Antigravity, your diffs automatically generate review reps here calibrated for your target level.
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Session Observer Listening</span>
+            </div>
+            <h2 className="font-serif text-2xl text-[var(--text-primary)] pt-1">No Practice Reps Queued</h2>
+            <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto leading-relaxed">
+              Make edits in Claude Code, Cursor, Codex, or Antigravity. As you write and save code, Engram extracts architectural state transitions and queues targeted recall questions calibrated for your target role.
             </p>
           </div>
+
+          <div className="p-3.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-left font-mono text-[11px] text-zinc-400 max-w-md mx-auto space-y-1">
+            <div className="text-zinc-600">// Terminal Daemon Status</div>
+            <div>$ engram status --watch</div>
+            <div className="text-emerald-400">✓ Background IPC worker active (0.4ms latency)</div>
+            <div className="text-zinc-500">Awaiting file save events in repository...</div>
+          </div>
+
           <button
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="px-5 py-2.5 bg-[var(--bg-surface-hover)] hover:bg-[var(--border-focus)] border border-[var(--border)] rounded-full text-sm font-medium text-[var(--text-primary)] transition-colors cursor-pointer"
+            className="px-6 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[#050505] rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer shadow-xs disabled:opacity-50 inline-flex items-center gap-2"
           >
-            Scan recent diffs now
+            {isGenerating ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-[#050505]/30 border-t-[#050505] rounded-full animate-spin" />
+                <span>Scanning repository diffs...</span>
+              </>
+            ) : (
+              <span>Scan Recent Git Diffs Now</span>
+            )}
           </button>
         </div>
       ) : (
@@ -325,7 +363,10 @@ export default function DashboardPage() {
                 disabled={isGeneratingStandup}
                 className="w-full py-2 px-3 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-zinc-200 transition-colors cursor-pointer flex items-center justify-center gap-2"
               >
-                <span>⚡ Generate Standup Prep</span>
+                <svg className="w-3.5 h-3.5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Generate Standup Prep</span>
               </button>
             </div>
           </aside>
@@ -412,7 +453,14 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex items-center justify-between gap-3 border-t border-[var(--border)]">
+              <button
+                onClick={handleCopyStandup}
+                className="px-4 py-2 rounded-full border border-white/[0.1] bg-white/[0.04] hover:bg-white/[0.08] text-xs font-medium text-zinc-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <span>{copiedStandup ? '✓ Copied to clipboard' : 'Copy brief for Slack/Teams'}</span>
+              </button>
+
               <button
                 onClick={() => setShowStandupModal(false)}
                 className="px-5 py-2 rounded-full bg-[var(--accent)] text-[#050505] text-xs font-semibold hover:bg-[var(--accent-hover)] transition-all cursor-pointer"
@@ -423,6 +471,16 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Quick Target Ladder Modal */}
+      <QuickTargetModal
+        isOpen={showTargetModal}
+        onClose={() => setShowTargetModal(false)}
+        currentTarget={profile?.targetLevel || 'sde2'}
+        onTargetUpdated={(newTarget) => {
+          setProfile((prev: any) => prev ? { ...prev, targetLevel: newTarget } : { targetLevel: newTarget });
+        }}
+      />
     </div>
   );
 }

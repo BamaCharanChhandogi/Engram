@@ -156,15 +156,19 @@ export default function SettingsPage() {
                 </p>
               </div>
 
-              <div className="w-full sm:w-auto flex items-center gap-2 font-mono text-xs">
-                <code className="px-3.5 py-1.5 rounded-full bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-primary)] text-xs select-all truncate max-w-xs sm:max-w-md">
+              <div className="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2 font-mono text-xs">
+                <code className="px-3.5 py-2 rounded-xl sm:rounded-full bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-primary)] text-xs select-all overflow-x-auto whitespace-nowrap sm:max-w-md">
                   {tool.command}
                 </code>
                 <button
                   onClick={() => handleCopyCmd(tool.command, tool.id)}
-                  className="px-3.5 py-1.5 rounded-full bg-[var(--bg-surface-hover)] hover:bg-[var(--border-focus)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-medium cursor-pointer shrink-0 transition-colors"
+                  className="px-4 py-2 rounded-full bg-[var(--bg-surface-hover)] hover:bg-[var(--border-focus)] border border-[var(--border)] text-[var(--text-primary)] text-xs font-medium cursor-pointer shrink-0 transition-colors flex items-center justify-center gap-1.5"
                 >
-                  {copiedCmd === tool.id ? '✓' : 'Copy'}
+                  {copiedCmd === tool.id ? (
+                    <span className="text-[var(--accent)] font-semibold">✓ Copied</span>
+                  ) : (
+                    <span>Copy Command</span>
+                  )}
                 </button>
               </div>
             </div>

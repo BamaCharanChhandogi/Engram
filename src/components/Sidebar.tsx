@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import QuickTargetModal, { TARGET_OPTIONS } from '@/components/QuickTargetModal';
 
 const navItems = [
   {
@@ -65,24 +66,55 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [currentTarget, setCurrentTarget] = useState('sde2');
+  const [showTargetModal, setShowTargetModal] = useState(false);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetch('/api/profile')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.targetLevel) {
+            setCurrentTarget(data.targetLevel);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [session?.user]);
+
+  const activeTargetObj = TARGET_OPTIONS.find((t) => t.id === currentTarget) || TARGET_OPTIONS[1];
 
   return (
     <>
-      {/* Mobile Top Header */}
-      <div className="md:hidden px-4 py-3 flex justify-between items-center border-b border-[var(--border)] bg-[var(--bg-surface)]">
-        <Link href="/" className="flex items-center">
+      {/* Mobile Sticky Top Header */}
+      <div className="sticky top-0 z-40 md:hidden px-4 py-3.5 flex justify-between items-center border-b border-[var(--border)] bg-[#09090b]/90 backdrop-blur-xl">
+        <Link href="/" className="flex items-center gap-2">
           <span className="font-serif text-xl tracking-tight text-[var(--text-primary)]">Engram</span>
         </Link>
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="p-1.5 rounded-full border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+          className="p-1.5 rounded-full border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
           aria-label="Toggle menu"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          {isOpen ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          )}
         </button>
       </div>
+
+      {/* Mobile Drawer Backdrop Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
       {/* Main Sidebar */}
       <aside 
@@ -92,18 +124,24 @@ export default function Sidebar() {
       >
         <div className="flex-1 overflow-y-auto">
           {/* Brand Logo */}
-          <div className="px-5 py-5 border-b border-[var(--border)]">
-            <Link href="/" className="flex items-center group">
+          <div className="px-5 py-5 border-b border-[var(--border)] flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 group">
               <span className="font-serif text-2xl tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
                 Engram
               </span>
             </Link>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="md:hidden text-zinc-400 hover:text-white p-1"
+            >
+              ✕
+            </button>
           </div>
 
           {/* Navigation Links */}
           <div className="px-3 py-4">
-            <div className="text-xs uppercase tracking-wider text-[var(--text-tertiary)] px-3 mb-2 font-medium">
-              Navigation
+            <div className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)] px-3 mb-2 font-mono">
+              Workspace
             </div>
             <nav className="space-y-1">
               {navItems.map((item) => {
@@ -113,10 +151,10 @@ export default function Sidebar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-full text-sm font-medium transition-all duration-150 ${
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${
                       isActive
-                        ? 'bg-[var(--accent-subtle)] text-[var(--text-primary)] border border-[var(--accent)]/20 shadow-xs'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)]'
+                        ? 'bg-[var(--accent-subtle)] text-[var(--text-primary)] border border-[var(--accent)]/30 shadow-xs'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] border border-transparent'
                     }`}
                   >
                     <span className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-secondary)]'}>
@@ -130,29 +168,33 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* User Account / Footer */}
-        <div className="p-3 border-t border-[var(--border)] bg-[var(--bg-primary)] shrink-0">
+        {/* User Account / Footer with protective bottom padding */}
+        <div className="p-3 pb-8 md:pb-6 border-t border-[var(--border)] bg-[var(--bg-primary)] shrink-0">
           {session?.user ? (
             <div className="space-y-2">
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border)]">
-                <div className="w-7 h-7 rounded-full bg-[var(--border)] flex items-center justify-center text-xs font-medium text-[var(--text-primary)] shrink-0">
+                <div className="w-7 h-7 rounded-full bg-[var(--border)] flex items-center justify-center text-xs font-medium text-[var(--text-primary)] shrink-0 font-mono">
                   {session.user.name?.charAt(0) || session.user.email?.charAt(0) || 'D'}
                 </div>
                 <div className="text-xs overflow-hidden leading-tight flex-1">
                   <p className="font-medium text-[var(--text-primary)] truncate">{session.user.name || 'Developer'}</p>
-                  <p className="text-[11px] text-[var(--text-secondary)] truncate">{session.user.email}</p>
+                  <p className="text-[11px] text-[var(--text-secondary)] truncate font-mono">{session.user.email}</p>
                 </div>
               </div>
-              <Link
-                href="/dashboard/profile"
-                className="w-full py-1.5 px-3 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--accent-subtle)] border border-[var(--border)] transition-colors flex items-center justify-between"
+              <button
+                type="button"
+                onClick={() => setShowTargetModal(true)}
+                className="w-full py-1.5 px-3 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-focus)] border border-[var(--border)] transition-colors flex items-center justify-between cursor-pointer group bg-[var(--bg-surface)]"
               >
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
-                  <span>Target Calibration</span>
+                <span className="flex items-center gap-1.5 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
+                  <span className="text-[var(--text-tertiary)]">Target:</span>
+                  <span className="text-[var(--text-primary)] font-medium group-hover:text-[var(--accent)] truncate">
+                    {activeTargetObj.label}
+                  </span>
                 </span>
-                <span className="text-[10px] text-[var(--accent)] font-medium">Edit →</span>
-              </Link>
+                <span className="text-[10px] text-[var(--accent)] font-medium shrink-0 ml-1">Switch →</span>
+              </button>
               <button 
                 onClick={() => signOut({ callbackUrl: '/login' })} 
                 className="w-full py-1.5 px-3 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--danger)] hover:bg-[var(--danger)]/10 transition-colors flex items-center justify-between cursor-pointer"
@@ -164,13 +206,21 @@ export default function Sidebar() {
           ) : (
             <Link 
               href="/login" 
-              className="block w-full py-2 px-3 rounded-full text-center bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[#050505] text-xs font-medium transition-colors"
+              className="block w-full py-2 px-3 rounded-full text-center bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[#050505] text-xs font-semibold transition-colors shadow-xs"
             >
               Sign In
             </Link>
           )}
         </div>
       </aside>
+
+      {/* Quick Target Ladder Modal */}
+      <QuickTargetModal
+        isOpen={showTargetModal}
+        onClose={() => setShowTargetModal(false)}
+        currentTarget={currentTarget}
+        onTargetUpdated={(newTarget) => setCurrentTarget(newTarget)}
+      />
     </>
   );
 }

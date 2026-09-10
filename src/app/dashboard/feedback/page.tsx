@@ -50,40 +50,58 @@ export default function FeedbackPage() {
       <div className="pb-6 border-b border-[var(--border)]">
         <div className="flex items-center gap-2 mb-1.5">
           <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
-          <span className="text-xs uppercase tracking-widest text-[var(--text-tertiary)] font-medium">
-            LLM Efficiency Coach
+          <span className="text-xs uppercase tracking-widest text-[var(--text-tertiary)] font-mono">
+            Prompt Hygiene & Security
           </span>
         </div>
-        <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[var(--text-primary)]">Prompt Engineering Quality</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[var(--text-primary)]">Prompt Context Density</h1>
         <p className="text-sm text-[var(--text-secondary)] mt-0.5">
-          Gemini evaluation of clarity, context density, and security risks in your AI prompts.
+          Automated linting for context precision, constraint boundaries, and credential exposure in IDE prompts.
         </p>
       </div>
 
       {/* Score Overview Card */}
-      <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border)] flex flex-col sm:flex-row items-center gap-6">
-        <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full border border-white/[0.08] bg-white/[0.02] shadow-inner shrink-0">
-          <span className={`font-serif text-4xl ${
-            overallScore >= 80 ? 'text-emerald-400' : 
-            overallScore >= 50 ? 'text-amber-400' : 
-            'text-rose-400'
-          }`}>
-            {overallScore}
-          </span>
-          <span className="text-[10px] text-[var(--text-tertiary)] uppercase font-medium tracking-wider">Score</span>
+      <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-5 w-full md:w-auto">
+          <div className="flex flex-col items-center justify-center w-20 h-20 rounded-full border border-white/[0.08] bg-white/[0.02] shadow-inner shrink-0">
+            <span className={`font-serif text-3xl font-normal ${
+              overallScore >= 80 ? 'text-emerald-400' : 
+              overallScore >= 50 ? 'text-amber-400' : 
+              'text-rose-400'
+            }`}>
+              {overallScore}
+            </span>
+            <span className="text-[10px] text-[var(--text-tertiary)] uppercase font-mono">INDEX</span>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+              Context Density Score
+            </h2>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-md">
+              {overallScore >= 80 
+                ? "Explicit constraints, targeted filepaths, and concrete return type contracts detected."
+                : overallScore >= 50
+                ? "Moderate quality. Specify exact filepaths and typed interfaces to prevent AI hallucination."
+                : "Ambiguous directives detected. Avoid one-line fixes without boundary constraints."}
+            </p>
+          </div>
         </div>
 
-        <div className="space-y-1 text-center sm:text-left">
-          <h2 className="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">
-            Prompt Quality Index
-          </h2>
-          <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-xl">
-            {overallScore >= 80 
-              ? "High prompt precision. Your prompts provide explicit constraints, file contexts, and expected outputs."
-              : overallScore >= 50
-              ? "Moderate quality. Consider naming exact filepaths and defining explicit return types to reduce AI hallucinations."
-              : "Low context density. Prompts contain ambiguous directives, single-word confirmations, or security risks like raw API keys."}
-          </p>
+        {/* 3 Sub-pills */}
+        <div className="grid grid-cols-3 gap-2 w-full md:w-auto shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-[var(--border)]">
+          <div className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-center">
+            <span className="text-[10px] text-[var(--text-tertiary)] uppercase font-mono block">Constraints</span>
+            <span className="text-xs font-semibold text-emerald-400 mt-0.5 block">Explicit</span>
+          </div>
+          <div className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-center">
+            <span className="text-[10px] text-[var(--text-tertiary)] uppercase font-mono block">Signatures</span>
+            <span className="text-xs font-semibold text-zinc-300 mt-0.5 block">Typed</span>
+          </div>
+          <div className="p-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-center">
+            <span className="text-[10px] text-[var(--text-tertiary)] uppercase font-mono block">Redaction</span>
+            <span className="text-xs font-semibold text-emerald-400 mt-0.5 block">0 Secrets</span>
+          </div>
         </div>
       </div>
 

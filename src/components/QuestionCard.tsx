@@ -95,7 +95,7 @@ export default function QuestionCard({ id, type, difficulty, question, codeConte
             {/* Agent Badge */}
             {agentSource && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-normal text-zinc-400 bg-white/[0.02] border border-white/[0.06]">
-                <span className="text-[var(--accent)] font-semibold text-[11px]">⚡</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
                 <span>
                   {agentSource === 'claude-code' ? 'Claude Code' :
                    agentSource === 'cursor' ? 'Cursor IDE' :
@@ -153,7 +153,7 @@ export default function QuestionCard({ id, type, difficulty, question, codeConte
                 }
               }}
               placeholder="State the underlying architectural reason, describe missing guards, or propose the exact code fix..."
-              className="w-full h-32 bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl p-3.5 text-[var(--text-primary)] text-sm font-sans leading-relaxed focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/20 resize-y"
+              className="w-full h-32 bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl p-3.5 text-[var(--text-primary)] text-[16px] sm:text-sm font-sans leading-relaxed focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]/20 resize-y"
             />
             <div className="flex items-center justify-between">
               <span className="text-xs text-[var(--text-tertiary)] hidden sm:inline">
@@ -177,7 +177,7 @@ export default function QuestionCard({ id, type, difficulty, question, codeConte
                       <span>Grading...</span>
                     </>
                   ) : (
-                    'Submit assessment'
+                    'Submit response'
                   )}
                 </button>
               </div>
@@ -186,20 +186,30 @@ export default function QuestionCard({ id, type, difficulty, question, codeConte
         ) : (
           /* Evaluation Output */
           <div className="mt-5 border-t border-[var(--border)] pt-5 animate-in fade-in duration-200 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`px-2.5 py-1 rounded-full text-sm font-mono font-bold border ${
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border ${
                   evaluation.score >= 80 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
                   evaluation.score >= 50 ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
                   'bg-rose-500/10 border-rose-500/30 text-rose-400'
                 }`}>
-                  {evaluation.score} / 100
-                </div>
+                  {evaluation.score}/100 {evaluation.score >= 80 ? 'Senior Pass' : 'Rubric Gaps'}
+                </span>
                 <span className="text-xs uppercase tracking-wider text-[var(--text-tertiary)] font-medium">
-                  Tech Lead Review
+                  Peer Review Standard
                 </span>
               </div>
-              <span className="text-xs text-[var(--text-tertiary)]">Evaluated via Gemini</span>
+              <span className="text-xs font-mono text-[var(--text-tertiary)]">Calibrated Evaluation</span>
+            </div>
+
+            {/* Score meter progress bar */}
+            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+              <div 
+                className={`h-full rounded-full transition-all duration-500 ${
+                  evaluation.score >= 80 ? 'bg-emerald-400' : evaluation.score >= 50 ? 'bg-amber-400' : 'bg-rose-400'
+                }`}
+                style={{ width: `${evaluation.score}%` }}
+              />
             </div>
 
             <p className="text-sm text-[var(--text-primary)] leading-relaxed border-l-2 border-[var(--border-focus)] pl-3.5 py-0.5">

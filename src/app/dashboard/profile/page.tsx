@@ -292,7 +292,7 @@ export default function ProfilePage() {
                 value={primaryStack}
                 onChange={(e) => setPrimaryStack(e.target.value)}
                 placeholder="e.g. TypeScript, React, Go, PostgreSQL, Redis, Kafka"
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-hidden focus:border-[var(--accent)] transition-colors"
+                className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-[16px] sm:text-sm text-[var(--text-primary)] focus:outline-hidden focus:border-[var(--accent)] transition-colors"
               />
             </div>
 
@@ -304,7 +304,7 @@ export default function ProfilePage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your Name"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-hidden focus:border-[var(--accent)] transition-colors"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] text-[16px] sm:text-sm text-[var(--text-primary)] focus:outline-hidden focus:border-[var(--accent)] transition-colors"
                 />
               </div>
               <div>
@@ -313,31 +313,35 @@ export default function ProfilePage() {
                   type="email"
                   disabled
                   value={email}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)]/50 border border-[var(--border)] text-sm text-[var(--text-tertiary)] cursor-not-allowed"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-primary)]/50 border border-[var(--border)] text-[16px] sm:text-sm text-[var(--text-tertiary)] cursor-not-allowed"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Live AI Calibration Preview */}
-        <div className="p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border)] space-y-3">
+        {/* System Calibration Pipeline Preview */}
+        <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border)] space-y-3">
           <div className="flex items-center gap-2 text-xs text-[var(--accent)] font-medium uppercase tracking-wider">
-            <span>⚡ AI Engine Calibration Preview</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+            <span>System Evaluation Directive & Ladder</span>
           </div>
           <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-            When you trigger practice questions from your IDE or CLI captures, Engram will prompt Gemini with:
+            When you trigger practice questions from your IDE or CLI captures, Engram will evaluate your answers against:
           </p>
-          <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border)] font-mono text-xs text-[var(--text-secondary)] leading-relaxed space-y-1.5">
-            <p className="text-[var(--accent)]">Engram Target Calibration Prompt</p>
-            <p className="text-[var(--text-primary)]">
-              "Evaluate developer's code diffs to bridge the gap from <strong className="text-[var(--accent)]">{currentLevelObj.label}</strong> to <strong className="text-[var(--accent)]">{targetLevelObj.label}</strong>."
+          <div className="p-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border)] font-mono text-xs text-[var(--text-secondary)] leading-relaxed space-y-1.5">
+            <div className="flex items-center justify-between text-[var(--accent)] pb-1 border-b border-[var(--border)] text-[11px]">
+              <span>ACTIVE DIRECTIVE: CALIBRATION_V2</span>
+              <span className="text-[var(--text-tertiary)]">{currentLevelObj.id} ➔ {targetLevelObj.id}</span>
+            </div>
+            <p className="text-[var(--text-primary)] pt-1">
+              "Evaluate developer diffs to bridge the gap from <strong className="text-[var(--accent)] font-semibold">{currentLevelObj.label}</strong> to <strong className="text-[var(--accent)] font-semibold">{targetLevelObj.label}</strong>."
             </p>
             <p className="text-[var(--text-tertiary)]">
-              Focus: {selectedFocus.slice(0, 3).join(', ')}...
+              Focus Domains: {selectedFocus.slice(0, 3).join(', ')}...
             </p>
             <p className="text-[var(--text-tertiary)]">
-              Evaluation standard: Senior peer review with edge-case and failure mode analysis.
+              Evaluation standard: Staff peer review with race condition, blast radius, and failure mode analysis.
             </p>
           </div>
         </div>
