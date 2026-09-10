@@ -16,7 +16,7 @@ export default function LandingPage() {
               //
             </div>
             <span className="font-semibold text-sm tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-              DevPractice
+              Engram
             </span>
           </Link>
 
@@ -65,7 +65,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto font-normal leading-relaxed">
-              Empirical trials show a <strong className="text-zinc-200">17% decline in debugging proficiency</strong> among developers using AI assistants. DevPractice silently captures your session diffs and turns them into 5-minute active recall practice.
+              Empirical trials show a <strong className="text-zinc-200">17% decline in debugging proficiency</strong> among developers using AI assistants. Engram silently captures your session diffs and turns them into 5-minute active recall practice.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
@@ -124,7 +124,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Right Column: What DevPractice tests you on */}
+              {/* Right Column: What Engram tests you on */}
               <div className="space-y-3">
                 <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 flex justify-between">
                   <span>02 // Generated Active Recall</span>
@@ -389,7 +389,7 @@ export default function LandingPage() {
               <div className="p-6 rounded-lg bg-[#121215] border border-zinc-800/80 space-y-2">
                 <h3 className="text-sm font-semibold text-zinc-100">Does my entire proprietary codebase get uploaded?</h3>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  No. Hooks only observe active session diffs and user prompts. You can configure local repository blocklists (`.devpracticeignore`), and our capture scripts operate strictly within the boundary you define.
+                  No. Hooks only observe active session diffs and user prompts. You can configure local repository blocklists (`.engramignore`), and our capture scripts operate strictly within the boundary you define.
                 </p>
               </div>
 
@@ -418,7 +418,7 @@ export default function LandingPage() {
             <div className="w-4 h-4 rounded bg-indigo-600 text-white flex items-center justify-center font-bold text-[9px]">
               D
             </div>
-            <span>DevPractice © 2026</span>
+            <span>Engram © 2026</span>
           </div>
           <div className="flex items-center gap-6">
             <a href="#pricing" className="hover:text-zinc-300 transition-colors">Pricing</a>

@@ -61,13 +61,13 @@ export default function RegisterPage() {
           //
         </div>
         <span className="font-semibold text-lg tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-          DevPractice
+          Engram
         </span>
       </Link>
       
       <div className="w-full max-w-sm bg-[#121215] p-8 rounded-lg border border-zinc-800 shadow-2xl space-y-6">
         <div className="text-center space-y-1">
-          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Create DevPractice Account</h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Create Engram Account</h1>
           <p className="text-xs text-zinc-400">Join the active recall layer for AI engineers</p>
         </div>
 

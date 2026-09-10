@@ -32,7 +32,7 @@ async function capturePrompts() {
   const userId = 'e60ef9af-9bbf-4eb9-94be-5a8a2f4669cc';
   const apiUrl = 'http://localhost:3000/api/capture';
 
-  console.log('\n--> Forwarding your actual session prompts to DevPractice API...');
+  console.log('\n--> Forwarding your actual session prompts to Engram API...');
 
   for (const prompt of userPrompts) {
     try {
@@ -40,7 +40,7 @@ async function capturePrompts() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer devpractice-capture-secret',
+          'Authorization': 'Bearer engram-capture-secret',
           'X-User-Id': userId
         },
         body: JSON.stringify({

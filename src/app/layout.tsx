@@ -3,8 +3,8 @@ import './globals.css';
 import Providers from '@/components/Providers';
 
 export const metadata: Metadata = {
-  title: 'DevPractice',
-  description: 'Turn AI-assisted coding into real skills',
+  title: 'Engram — The Cognitive Retention Layer for AI Coding',
+  description: 'Retain your engineering edge while your AI writes the code.',
 };
 
 export default function RootLayout({

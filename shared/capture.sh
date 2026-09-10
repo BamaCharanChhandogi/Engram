@@ -1,7 +1,7 @@
 #!/bin/bash
 set +e # Never exit on error automatically
 
-LOG_DIR="$HOME/.devpractice"
+LOG_DIR="$HOME/.engram"
 LOG_FILE="$LOG_DIR/error.log"
 mkdir -p "$LOG_DIR" 2>/dev/null
 
@@ -16,14 +16,14 @@ if [ ! -t 0 ]; then
     INPUT_DATA=$(cat)
 fi
 
-API_URL="${DEVPRACTICE_API:-http://localhost:3000}"
+API_URL="${ENGRAM_API:-${DEVPRACTICE_API:-http://localhost:3000}}"
 ENDPOINT="${API_URL%/}/api/capture"
-TOKEN="${DEVPRACTICE_TOKEN:-}"
+TOKEN="${ENGRAM_TOKEN:-${DEVPRACTICE_TOKEN:-}}"
 
 # Minimal payload construction
-EVENT_TYPE="${DEVPRACTICE_EVENT:-unknown}"
-TOOL="${DEVPRACTICE_TOOL:-unknown}"
-SESSION="${DEVPRACTICE_SESSION:-unknown}"
+EVENT_TYPE="${ENGRAM_EVENT:-${DEVPRACTICE_EVENT:-unknown}}"
+TOOL="${ENGRAM_TOOL:-${DEVPRACTICE_TOOL:-unknown}}"
+SESSION="${ENGRAM_SESSION:-${DEVPRACTICE_SESSION:-unknown}}"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 # Basic JSON payload with raw input text

@@ -61,9 +61,9 @@ export default function Sidebar() {
       <div className="md:hidden px-4 py-3 flex justify-between items-center border-b border-[var(--border)] bg-[#0c0c0e]">
         <div className="flex items-center gap-2.5">
           <div className="w-6 h-6 rounded bg-indigo-600 flex items-center justify-center text-white font-mono font-bold text-xs">
-            D
+            //
           </div>
-          <span className="font-semibold text-sm tracking-tight text-zinc-100">DevPractice</span>
+          <span className="font-semibold text-sm tracking-tight text-zinc-100">Engram</span>
         </div>
         <button 
           onClick={() => setIsOpen(!isOpen)} 
@@ -91,10 +91,10 @@ export default function Sidebar() {
               </div>
               <div className="flex flex-col">
                 <span className="font-semibold text-sm tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-                  DevPractice
+                  Engram
                 </span>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                  Skill Layer
+                  Memory Layer
                 </span>
               </div>
             </Link>

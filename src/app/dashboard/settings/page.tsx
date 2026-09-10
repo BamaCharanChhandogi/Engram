@@ -8,28 +8,28 @@ const tools = [
     name: 'Claude Code CLI',
     badge: 'Official Plugin',
     desc: 'Hooks into UserPromptSubmit, PostToolUse (Write/Edit/Bash), and Stop lifecycle events.',
-    command: 'claude plugin install devpractice',
+    command: 'claude plugin install engram',
   },
   {
     id: 'cursor',
     name: 'Cursor IDE',
     badge: 'Workspace Hooks',
     desc: 'Captures beforeSubmitPrompt and afterFileEdit non-blockingly.',
-    command: 'npx devpractice init --cursor',
+    command: 'npx engram init --cursor',
   },
   {
     id: 'codex',
     name: 'OpenAI Codex CLI',
     badge: 'CLI Daemon',
     desc: 'Hooks into SessionStart, UserPromptSubmit, and PostToolUse.',
-    command: 'npx devpractice init --codex',
+    command: 'npx engram init --codex',
   },
   {
     id: 'antigravity',
     name: 'Google Antigravity',
     badge: 'Adapter Active',
     desc: 'Observes PreToolUse, PostToolUse, and Stop via local adapter.',
-    command: 'npx devpractice init --antigravity',
+    command: 'npx engram init --antigravity',
   },
 ];
 
@@ -37,7 +37,7 @@ export default function SettingsPage() {
   const [showToken, setShowToken] = useState(false);
   const [copiedToken, setCopiedToken] = useState(false);
   const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
-  const apiToken = 'devpractice-capture-secret';
+  const apiToken = 'engram-capture-secret';
 
   const handleCopyToken = () => {
     navigator.clipboard.writeText(apiToken);
@@ -151,11 +151,11 @@ export default function SettingsPage() {
       <div className="p-5 rounded-lg bg-[#0e0e12] border border-zinc-800 space-y-2 text-xs font-mono">
         <div className="text-zinc-300 font-semibold">// Global Environment Variables</div>
         <p className="text-zinc-400 text-xs font-sans">
-          To point hooks from external machines to your DevPractice instance:
+          To point hooks from external machines to your Engram instance:
         </p>
         <pre className="p-3 rounded bg-[#09090b] text-zinc-300 overflow-x-auto text-[11px] border border-zinc-800/80">
-<code>export DEVPRACTICE_API="http://localhost:3000"
-export DEVPRACTICE_TOKEN="devpractice-capture-secret"</code>
+<code>export ENGRAM_API="http://localhost:3000"
+export ENGRAM_TOKEN="engram-capture-secret"</code>
         </pre>
       </div>
     </div>

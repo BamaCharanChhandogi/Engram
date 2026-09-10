@@ -67,10 +67,10 @@ async function main() {
       recentToolDetails = payloadObj.toolCall;
     }
 
-    const apiUrl = process.env.DEVPRACTICE_API || 'http://localhost:3000';
+    const apiUrl = process.env.ENGRAM_API || process.env.DEVPRACTICE_API || 'http://localhost:3000';
     const endpoint = apiUrl.replace(/\/$/, '') + '/api/capture';
-    const token = process.env.DEVPRACTICE_TOKEN || 'devpractice-capture-secret';
-    const userId = process.env.DEVPRACTICE_USER_ID || 'e60ef9af-9bbf-4eb9-94be-5a8a2f4669cc';
+    const token = process.env.ENGRAM_TOKEN || process.env.DEVPRACTICE_TOKEN || 'engram-capture-secret';
+    const userId = process.env.ENGRAM_USER_ID || process.env.DEVPRACTICE_USER_ID || 'e60ef9af-9bbf-4eb9-94be-5a8a2f4669cc';
 
     let eventType = 'tool_use';
     if (lastUserPrompt) {

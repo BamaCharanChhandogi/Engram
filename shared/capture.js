@@ -5,7 +5,7 @@ const os = require('os');
 // Fallback error logging
 function logError(message) {
     try {
-        const logDir = path.join(os.homedir(), '.devpractice');
+        const logDir = path.join(os.homedir(), '.engram');
         if (!fs.existsSync(logDir)) {
             fs.mkdirSync(logDir, { recursive: true });
         }
@@ -55,15 +55,15 @@ async function main() {
             }
         }
 
-        const apiUrl = process.env.DEVPRACTICE_API || 'http://localhost:3000';
+        const apiUrl = process.env.ENGRAM_API || process.env.DEVPRACTICE_API || 'http://localhost:3000';
         const endpoint = apiUrl.replace(/\/$/, '') + '/api/capture';
-        const token = process.env.DEVPRACTICE_TOKEN || '';
+        const token = process.env.ENGRAM_TOKEN || process.env.DEVPRACTICE_TOKEN || '';
 
         const capturePayload = {
-            event_type: payloadObj.event_type || payloadObj.event || process.env.DEVPRACTICE_EVENT || 'unknown',
-            tool: payloadObj.tool || process.env.DEVPRACTICE_TOOL || 'unknown',
+            event_type: payloadObj.event_type || payloadObj.event || process.env.ENGRAM_EVENT || process.env.DEVPRACTICE_EVENT || 'unknown',
+            tool: payloadObj.tool || process.env.ENGRAM_TOOL || process.env.DEVPRACTICE_TOOL || 'unknown',
             payload: payloadObj,
-            session_id: process.env.DEVPRACTICE_SESSION || 'unknown',
+            session_id: process.env.ENGRAM_SESSION || process.env.DEVPRACTICE_SESSION || 'unknown',
             captured_at: new Date().toISOString()
         };
 

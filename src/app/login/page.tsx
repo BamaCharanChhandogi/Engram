@@ -43,13 +43,13 @@ export default function LoginPage() {
           //
         </div>
         <span className="font-semibold text-lg tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-          DevPractice
+          Engram
         </span>
       </Link>
       
       <div className="w-full max-w-sm bg-[#121215] p-8 rounded-lg border border-zinc-800 shadow-2xl space-y-6">
         <div className="text-center space-y-1">
-          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Sign in to DevPractice</h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Sign in to Engram</h1>
           <p className="text-xs text-zinc-400">Retain your engineering edge with active recall</p>
         </div>
 
@@ -111,7 +111,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-center text-xs text-zinc-500 font-mono pt-2">
-          New to DevPractice? <Link href="/register" className="text-indigo-400 hover:underline">Register account</Link>
+          New to Engram? <Link href="/register" className="text-indigo-400 hover:underline">Register account</Link>
         </p>
       </div>
     </div>
