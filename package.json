@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "watch": "node scripts/engram-watch.js",
+    "mcp": "node mcp-server/index.js"
+  },
+  "bin": {
+    "engram-watch": "./scripts/engram-watch.js",
+    "engram-mcp": "./mcp-server/index.js"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
