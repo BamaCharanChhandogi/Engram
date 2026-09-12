@@ -57,35 +57,97 @@ if (command === 'init') {
     if (!fs.existsSync(codexDir)) fs.mkdirSync(codexDir, { recursive: true });
 
     const hooksFile = path.join(codexDir, 'hooks.json');
-    const hookConfig = {
-      hooks: {
-        UserPromptSubmit: [{ hooks: [{ type: 'command', command: `node "${captureScriptPath}"`, timeout: 5, async: true }] }],
-        PostToolUse: [{ hooks: [{ type: 'command', command: `node "${captureScriptPath}"`, timeout: 5, async: true }] }],
-        SessionStart: [{ hooks: [{ type: 'command', command: `node "${captureScriptPath}"`, timeout: 5, async: true }] }],
-        Stop: [{ hooks: [{ type: 'command', command: `node "${captureScriptPath}"`, timeout: 5, async: true }] }]
+    let existing = { hooks: {} };
+    if (fs.existsSync(hooksFile)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(hooksFile, 'utf8'));
+        if (parsed && typeof parsed === 'object') existing = parsed;
+        if (!existing.hooks || typeof existing.hooks !== 'object') existing.hooks = {};
+      } catch (e) {
+        existing = { hooks: {} };
       }
-    };
+    }
 
-    fs.writeFileSync(hooksFile, JSON.stringify(hookConfig, null, 2), 'utf8');
+    const engramCodexHook = { type: 'command', command: `node "${captureScriptPath}"`, timeout: 5, async: true };
+    const events = ['UserPromptSubmit', 'PostToolUse', 'SessionStart', 'Stop'];
 
-    console.log(`\x1b[32m✓ Codex hooks configured:\x1b[0m ${hooksFile}`);
-    console.log(`\x1b[90mEnsure hooks = true in config.toml to enable background capture.\x1b[0m\n`);
+    events.forEach(evt => {
+      if (!Array.isArray(existing.hooks[evt])) {
+        existing.hooks[evt] = [];
+      }
+      const alreadyPresent = existing.hooks[evt].some(entry =>
+        JSON.stringify(entry).includes('capture.js')
+      );
+      if (!alreadyPresent) {
+        existing.hooks[evt].push({ hooks: [engramCodexHook] });
+      }
+    });
+
+    fs.writeFileSync(hooksFile, JSON.stringify(existing, null, 2), 'utf8');
+    console.log(`\x1b[32m✓ Codex hooks configured (merged with existing config):\x1b[0m ${hooksFile}\n`);
   } else if (flags.cursor) {
     const cursorDir = path.join(targetDir, '.cursor');
     if (!fs.existsSync(cursorDir)) fs.mkdirSync(cursorDir, { recursive: true });
 
     const hooksFile = path.join(cursorDir, 'hooks.json');
-    const hookConfig = {
-      version: '1',
-      hooks: {
-        afterFileEdit: [{ command: `node "${captureScriptPath}"` }],
-        beforeSubmitPrompt: [{ command: `node "${captureScriptPath}"` }]
+    let existing = { version: '1', hooks: {} };
+    if (fs.existsSync(hooksFile)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(hooksFile, 'utf8'));
+        if (parsed && typeof parsed === 'object') existing = parsed;
+        if (!existing.hooks || typeof existing.hooks !== 'object') existing.hooks = {};
+      } catch (e) {
+        existing = { version: '1', hooks: {} };
       }
-    };
-    fs.writeFileSync(hooksFile, JSON.stringify(hookConfig, null, 2), 'utf8');
-    console.log(`\x1b[32m✓ Cursor workspace hooks configured:\x1b[0m ${hooksFile}\n`);
+    }
+
+    const cursorEvents = [
+      { event: 'afterFileEdit', command: `node "${captureScriptPath}"` },
+      { event: 'beforeSubmitPrompt', command: `node "${captureScriptPath}"` }
+    ];
+
+    cursorEvents.forEach(({ event, command }) => {
+      if (!Array.isArray(existing.hooks[event])) {
+        existing.hooks[event] = [];
+      }
+      const alreadyPresent = existing.hooks[event].some(entry =>
+        JSON.stringify(entry).includes('capture.js')
+      );
+      if (!alreadyPresent) {
+        existing.hooks[event].push({ command });
+      }
+    });
+
+    fs.writeFileSync(hooksFile, JSON.stringify(existing, null, 2), 'utf8');
+    console.log(`\x1b[32m✓ Cursor workspace hooks configured (merged with existing config):\x1b[0m ${hooksFile}\n`);
   } else if (flags.antigravity) {
-    console.log(`\x1b[32m✓ Google Antigravity observer adapter configured.\x1b[0m\n`);
+    const agyDir = path.join(targetDir, '.gemini', 'antigravity');
+    if (!fs.existsSync(agyDir)) fs.mkdirSync(agyDir, { recursive: true });
+
+    const hooksFile = path.join(agyDir, 'hooks.json');
+    let existing = { hooks: {} };
+    if (fs.existsSync(hooksFile)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(hooksFile, 'utf8'));
+        if (parsed && typeof parsed === 'object') existing = parsed;
+        if (!existing.hooks || typeof existing.hooks !== 'object') existing.hooks = {};
+      } catch (e) {
+        existing = { hooks: {} };
+      }
+    }
+
+    if (!Array.isArray(existing.hooks.PreToolUse)) {
+      existing.hooks.PreToolUse = [];
+    }
+    const alreadyPresent = existing.hooks.PreToolUse.some(entry =>
+      JSON.stringify(entry).includes('capture.js')
+    );
+    if (!alreadyPresent) {
+      existing.hooks.PreToolUse.push({ command: `node "${captureScriptPath}"` });
+    }
+
+    fs.writeFileSync(hooksFile, JSON.stringify(existing, null, 2), 'utf8');
+    console.log(`\x1b[32m✓ Google Antigravity hooks configured (merged with existing config):\x1b[0m ${hooksFile}\n`);
   } else {
     console.log('Specify an agent flag to initialize:');
     console.log('  npx engram-recall init --codex --key=<YOUR_TOKEN>');
